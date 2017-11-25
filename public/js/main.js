@@ -1286,7 +1286,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 navWrap[1].classList.add('flat'); // bottom nav
                 lightMode.classList.add('contact'); // light mode
 
-                var uluru = {lat: 27.803628, lng: -82.733539};
+                var uluru = {lat: 27.791959, lng: -82.723924};
 
                 var map = new google.maps.Map(document.getElementById('map'), {
                     backgroundColor: 'transparent',
@@ -1316,8 +1316,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     '<div id="iw-content">' +
                     '<h1>Samuel Craig</h1>' +
                     '<h1>Saint Petersburg,</h1>' +
-                    '<h1>6861, 35th Ave N</h1>' +
-                    '<h1>33710</h1>' +
+                    '<h1>Florida</h1>' +
                     '<br>' +
                     '<a><span style="color: #57a3e4">@</span> : samc2198@gmail.com</a>' +
                     '</div>' +
@@ -1326,8 +1325,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 var infowindow = new google.maps.InfoWindow({
                     content: contentString
                 })
-
-                //var icon = (localStorage.getItem('color') === 'dark') ? 'images/logoMarkerDark.svg' : 'images/logoMarkerLight.svg';
 
                 var marker = new google.maps.Marker({
                     position: uluru,
