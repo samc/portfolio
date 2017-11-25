@@ -1,0 +1,23 @@
+.view.v.normal.contact.ng-cloak
+    .header-container.contact
+        .header-title-wrap
+            h1(class='header big first') get
+            h1(class='header big middle') in
+            h1(class='header big last') touch
+        .header-info-wrap
+            h2(class='header info') Talk about new projects, freelance inquiry, or just a chat.
+    .contact-form
+        form#contact(autocomplete="off" method="post" novalidate)
+                .short
+                    input#name(placeholder="Name" type="text" name="name")
+                    label
+                .short
+                    input#email(placeholder="Email" type="email" name="email")
+                    label
+                .text-area
+                    textarea#text-area(placeholder="Message" name="message")
+                    label
+                .submit
+                    input(id="submit" type="submit" class="submit-button error" value="SEND")
+.map-wrapper.v.normal.ng-cloak
+    #map
