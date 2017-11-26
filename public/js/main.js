@@ -175,7 +175,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         // Home Page Animation Sequence
         //------------------------------
         var outline = document.querySelector('.site-loader'), //        || loading border animation (left & bottom)
-            _outline = outline.querySelectorAll('.line'),//             || loading border animation (top & right)
+            topBorder = outline.querySelector('.line.top'),
+            rightBorder = outline.querySelector('.line.right'),
             slider = document.querySelector('.transition-sliders');//   || slider animation following border collapse
 
         var tl = new TimelineLite({paused: true});
@@ -186,13 +187,16 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             })
             // start to expand width and height of bottom / left border
             .to(outline, 0.8, {width: '100%', height: '100%', ease: Quad.easeIn})
-            .to(_outline, 0.8, {width: '110%', height: '110%', ease: Expo.easeOut})
+            //.to(_outline, 0.8, {width: '110%', height: '110%', ease: Expo.easeOut})
+            .to(topBorder, 0.8, {width: '102%', ease: Expo.easeOut})
+            .to(rightBorder, 0.8, {height: '102%', ease: Expo.easeOut}, '-=.8')
             .add(function () {
                 outline.style.borderTop = '8px solid transparent';
                 outline.style.borderRight = '8px solid transparent'
             })
             // after pseudo top & right lines animations are complete, hide to reveal proper borders introduced above
-            .to(_outline, 0.1, {visibility: 'hidden'})
+            .to(topBorder, 0.1, {visibility: 'hidden'})
+            .to(rightBorder, 0.1, {visibility: 'hidden'}, '-=.1')
             .to(outline, 0.5, {borderWidth: 0})
             // visibility withheld to prevent pre-rendering with high refresh rate
             .to(slider, 1, {visibility: 'visible'}, 'shutterStart')
@@ -211,10 +215,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // reveal background
             .add(function () {
                 document.getElementById('background').classList.add('active');
+                document.querySelector('.nav-bottom').classList.remove('paused');
+                document.querySelector('.nav-top').classList.remove('paused');
             }, 'shutterStart+=1.8')
             // reveal nav bars
-            .to(document.querySelectorAll('nav'), 1, {animationPlayState: 'running'}, 'shutterStart+=1.8')
-            .to(document.querySelectorAll('nav'), 1, {WebkitAnimationPlayState: 'running'}, 'shutterStart+=1.8')
+            // .to(document.querySelectorAll('nav'), 1, {animationPlayState: 'running'}, 'shutterStart+=1.8')
+            // .to(document.querySelectorAll('nav'), 1, {WebkitAnimationPlayState: 'running'}, 'shutterStart+=1.8')
             // reveal nav icons
             .to(document.querySelectorAll('.nav-icon'), 1, {opacity: 1}, 'shutterStart+=3.3')
             // hide transition sliders
@@ -909,32 +915,30 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
         $timeout(function () {
 
-            // function adjustView() {
-            //
-            //     var view = document.querySelector('.view');
-            //
-            //     console.log(window.innerWidth);
-            //
-            //     if (window.innerWidth <= 768) {
-            //         console.log('update view true');
-            //         var baseWidth = 375,
-            //             baseHeight = 667,
-            //             transformScaleHeight = window.innerWidth / baseWidth,
-            //             transformScaleWidth = window.innerHeight / baseHeight,
-            //             transformScale = (transformScaleHeight > transformScaleWidth) ? transformScaleWidth : transformScaleHeight,
-            //             translateScale = (transformScale - 1) * 30;
-            //
-            //             console.log(transformScale, translateScale);
-            //
-            //         view.style.transform = 'scale(' + transformScale + ') translateY(' + (translateScale - 50) + '%) translateX(' + (translateScale - 50) + '%)';
-            //     } else {
-            //         console.log('update view false');
-            //         view.style.transform = 'scale(1) translateY(-50%)';
-            //     }
-            // }
-            //
-            // adjustView();
-            // $window.addEventListener('resize', adjustView);
+            function adjustViewSliderAnimations() {
+
+                var bodies = document.querySelectorAll('.header.body'),
+                    covers = document.querySelectorAll('.cover');
+
+                for (var b = 0; b < bodies.length; b++) {
+                    var bodyHeight = parseInt(window.getComputedStyle(bodies[b], null).getPropertyValue('height'));
+                    bodies[b].parentNode.style.height = bodyHeight - (bodyHeight * 0.05) + 'px';
+                    console.log(bodyHeight - (bodyHeight * 0.05) + 'px');
+                }
+                for (var c = 0; c < covers.length; c++) {
+                    var coverParent = covers[c].parentNode,
+                        coverHeight = parseInt(window.getComputedStyle(coverParent,  null).getPropertyValue('height')),
+                        coverWidth = parseInt(window.getComputedStyle(coverParent,  null).getPropertyValue('width'));
+
+                    covers[c].style.height = coverHeight + (coverHeight * 0.05) + 'px';
+                    covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
+                    covers[c].style.top = (window.innerWidth <= 768) ? coverHeight * -0.1 + 'px' : coverHeight * 0.1 + 'px';
+                    console.log(coverHeight + (coverHeight * 0.05) + 'px', coverWidth + (coverWidth * 0.05) + 'px');
+                }
+            }
+
+            adjustViewSliderAnimations();
+            $window.addEventListener('resize', adjustViewSliderAnimations);
 
             if (localStorage.getItem('color') === 'dark' && !$scope.hasChangedView) {
                 $scope.toggleViewColors();
@@ -966,8 +970,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // skills route handler
             if ($location.path() === '/skills') {
 
-                (function() {
-                    var styleTop = (window.innerWidth <= 768) ? '-42vh' :  '-40vh';
+                (function () {
+                    var styleTop = (window.innerWidth <= 768) ? '-42vh' : '-40vh';
 
                     document.getElementById('skill-wrap').style.cssText = 'top:' + styleTop + ' !important;left:0vw !important';
                 })();
@@ -1036,7 +1040,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 window.addEventListener(wheelEvent, function (e) {
 
                     if ($location.path() === '/skills') {
-                        
+
                         var skillWrap = document.getElementById('skill-wrap'),
                             skillFocused = skillWrap.childNodes[17];
 

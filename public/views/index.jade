@@ -4,7 +4,7 @@ html(ng-app='app' lang='en')
         script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")
         meta(charset='UTF-8')
         meta(http-equiv='X-UA-Compatible' content='IE-edge,chrome=1')
-        meta(name='viewport' content='width=device-width,initial-scale=1.0')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
         //link(rel='stylesheet', href='css/style.css')
         link(rel='stylesheet', href='dist/style.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
@@ -45,7 +45,7 @@ html(ng-app='app' lang='en')
                     g(clip-path='url(#moonFillClip)')
                         path(d='M50,61.998c-6.627,0-11.999-5.372-11.999-11.998c0-6.627,5.372-11.999,11.999-11.999c0.755,0,1.491,0.078,2.207,0.212c-0.132,0.576-0.208,1.173-0.208,1.788c0,4.418,3.582,7.999,8,7.999c0.614,0,1.212-0.076,1.788-0.208c0.133,0.717,0.211,1.452,0.211,2.208C61.998,56.626,56.626,61.998,50,61.998z')
 
-            nav(class='nav-top')
+            nav(class='nav-top paused')
                 .nav-wrapper.top
                     a.nav-icon.twitter(title="Twitter")
                         svg(viewBox="0 0 512 512")
@@ -90,7 +90,7 @@ html(ng-app='app' lang='en')
                             '308.1l51.5-34.4 63.8 42.6V384.9zM256 290.8l-52-34.8 52-34.8 52' +
                             ' 34.8L256 290.8zM270.7 384.9V316.3l63.8-42.6 51.5 34.4L270.7 ' +
                             '384.9zM397.7 280.6l-36.8-24.6 36.8-24.6V280.6z')
-            nav(class='nav-bottom')
+            nav(class='nav-bottom paused')
                 .nav-wrapper.bot
                     a.nav-icon.home.active(ng-click="changeView('', $event)" title="Home")
                         i.fa.fa-home(aria-hidden='true')
