@@ -583,8 +583,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
             var navBars = document.getElementsByTagName('NAV');
 
-            console.log(window.innerWidth, $scope.mobileWidth);
-
             if ($location.path() !== '/contact') {
                 if (window.innerWidth <= $scope.mobileWidth) {
                     navBars[0].classList.add('flat');
@@ -980,7 +978,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 for (var b = 0; b < bodies.length; b++) {
                     var bodyHeight = parseInt(window.getComputedStyle(bodies[b], null).getPropertyValue('height'));
                     bodies[b].parentNode.style.height = bodyHeight - (bodyHeight * 0.05) + 'px';
-                    console.log(bodyHeight - (bodyHeight * 0.05) + 'px');
                 }
                 for (var c = 0; c < covers.length; c++) {
                     var coverParent = covers[c].parentNode,
@@ -991,7 +988,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
                     covers[c].style.top = coverHeight * 0.1 + 'px';
                     coverParent.style.paddingBottom = coverHeight * 0.1 + 'px';
-                    console.log(coverHeight + (coverHeight * 0.05) + 'px', coverWidth + (coverWidth * 0.05) + 'px');
                 }
             }
 
@@ -1338,7 +1334,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
 
                     if (dataSuccess) {
-                        console.log('dataSuccess');
                         var xhr = new XMLHttpRequest();
                         xhr.open('POST', '/contact', true);
                         xhr.setRequestHeader("Content-type", "application/json");
@@ -1440,7 +1435,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
 
             if ($scope.hasChangedView) {
-                // change view specific animations
+                // view change specific animations
                 $timeout(function () {
                     $scope.updateView()
                 }, 0);
