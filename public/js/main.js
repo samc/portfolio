@@ -406,17 +406,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
         })();
 
-        //------------------------------
-        // Transition Animations
-        //------------------------------
-
         $scope.changeView = function (route) {
 
             $scope.hasChangedView = true;
-
-            // change view specific animations
-            document.getElementById('light-mode').classList.remove('active');
-            document.getElementById('background').classList.add('transition');
 
             // only change view if current view and selected view are different
             if (!($scope.currentView === '/' + route)) {
@@ -424,6 +416,10 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 //------------------------------
                 // Transition Animations
                 //------------------------------
+
+                // change view specific animations
+                document.getElementById('light-mode').classList.remove('active');
+                document.getElementById('background').classList.add('transition');
 
                 var navBanners = document.getElementsByTagName('NAV'),
                     viewChildren = document.getElementById('view-container').childNodes,
