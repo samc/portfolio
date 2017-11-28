@@ -77,10 +77,9 @@ app.post('/contact', function (req, res) {
     // Prevent key tampering from messing with email handler
     if (!(data.name === undefined || data.email === undefined || data.message === undefined)) {
         var mailOptions = {
-            from: '<' + data.email + '>', // sender address
             to: 'samc2198@gmail.com', // receiver address
             subject: 'Portfolio Inquiry', // subject line
-            text: data.message // plain text body
+            text: '[' + data.email + '] : ' +data.message // plain text body
         };
 
         // Return 'success' or 'error' message following email attempt
