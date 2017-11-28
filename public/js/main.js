@@ -406,6 +406,10 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
         })();
 
+        //------------------------------
+        // Transition Animations
+        //------------------------------
+
         $scope.changeView = function (route) {
 
             $scope.hasChangedView = true;
@@ -471,6 +475,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.getElementById('background'),
                 document.getElementById('sun'),
                 document.getElementById('moon'),
+                document.getElementById('notification'),
                 document.querySelector('.transition-sliders'),
                 document.body
             ]
@@ -498,49 +503,49 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
 
-        var shakeCounter = 0,
-            prevMouseX = 0,
-            leftPeak = 0,
-            rightPeak = 0,
-            rightPeakReached = false,
-            shakeDistance = 500,
-            shakesToTrigger = 7;
-
-        window.onmousemove = function (e) {
-            e = e || window.event;
-            var mouseX = e.clientX;
-
-            // mouse is moving right
-            if (mouseX > prevMouseX) {
-                rightPeak = mouseX;
-                if (rightPeak - leftPeak >= shakeDistance && !rightPeakReached) {
-                    rightPeakReached = true;
-                    shakeCounter++;
-                }
-                // mouse is moving left
-            } else {
-                leftPeak = mouseX;
-                if (rightPeak - leftPeak >= shakeDistance && rightPeakReached) {
-                    rightPeakReached = false;
-                    shakeCounter++;
-                }
-            }
-
-            // trigger light mode change
-            if (shakeCounter >= shakesToTrigger) {
-                shakeCounter = 0;
-                document.getElementById('light-mode').dispatchEvent(new Event('click'));
-            }
-
-            prevMouseX = mouseX
-
-            // if the user has not moved their mouse within the last 100ms, 'shakeCounter' is reset
-            clearTimeout(this.shakeDecayDelay);
-
-            this.shakeDecayDelay = setTimeout(function () {
-                shakeCounter = 0;
-            }, 100);
-        };
+        // var shakeCounter = 0,
+        //     prevMouseX = 0,
+        //     leftPeak = 0,
+        //     rightPeak = 0,
+        //     rightPeakReached = false,
+        //     shakeDistance = 500,
+        //     shakesToTrigger = 7;
+        //
+        // window.onmousemove = function (e) {
+        //     e = e || window.event;
+        //     var mouseX = e.clientX;
+        //
+        //     // mouse is moving right
+        //     if (mouseX > prevMouseX) {
+        //         rightPeak = mouseX;
+        //         if (rightPeak - leftPeak >= shakeDistance && !rightPeakReached) {
+        //             rightPeakReached = true;
+        //             shakeCounter++;
+        //         }
+        //         // mouse is moving left
+        //     } else {
+        //         leftPeak = mouseX;
+        //         if (rightPeak - leftPeak >= shakeDistance && rightPeakReached) {
+        //             rightPeakReached = false;
+        //             shakeCounter++;
+        //         }
+        //     }
+        //
+        //     // trigger light mode change
+        //     if (shakeCounter >= shakesToTrigger) {
+        //         shakeCounter = 0;
+        //         document.getElementById('light-mode').dispatchEvent(new Event('click'));
+        //     }
+        //
+        //     prevMouseX = mouseX
+        //
+        //     // if the user has not moved their mouse within the last 100ms, 'shakeCounter' is reset
+        //     clearTimeout(this.shakeDecayDelay);
+        //
+        //     this.shakeDecayDelay = setTimeout(function () {
+        //         shakeCounter = 0;
+        //     }, 100);
+        // };
 
         document.getElementById('light-mode').addEventListener('click', function () {
             if (localStorage.getItem('color') === null) {
@@ -556,12 +561,29 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         }
 
         //------------------------------
+        // Notification Creation
+        //------------------------------
+
+        $scope.createNotification = function(message){
+            var notification = document.getElementById('notification');
+
+            notification.innerHTML = message;
+            notification.classList.add('active');
+
+            $timeout(function(){
+                notification.classList.remove('active');
+            }, 5000);
+        }
+
+        //------------------------------
         // Mobile Style Handler
         //------------------------------
 
         function adjustNavBars() {
 
             var navBars = document.getElementsByTagName('NAV');
+
+            console.log(window.innerWidth, $scope.mobileWidth);
 
             if ($location.path() !== '/contact') {
                 if (window.innerWidth <= $scope.mobileWidth) {
@@ -576,6 +598,41 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
         adjustNavBars();
         window.addEventListener('resize', adjustNavBars);
+
+        if (window.DeviceMotionEvent !== 'undefined') {
+            // Shake sensitivity (a lower number is more)
+            var sensitivity = 25,
+                active = false
+
+            // Position variables
+            var x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+
+            // Listen to motion events and update the position
+            window.addEventListener('devicemotion', function (e) {
+                x1 = e.accelerationIncludingGravity.x;
+                y1 = e.accelerationIncludingGravity.y;
+                z1 = e.accelerationIncludingGravity.z;
+            }, false);
+
+            // Periodically check the position and fire
+            // if the change is greater than the sensitivity
+            setInterval(function () {
+                var change = Math.abs(x1-x2+y1-y2+z1-z2);
+
+                if (change > sensitivity && !active) {
+                    document.getElementById('light-mode').dispatchEvent(new MouseEvent('click'));
+                    active = true;
+                    setTimeout(function(){
+                        active = false;
+                    }, 2000)
+                }
+
+                // Update new position
+                x2 = x1;
+                y2 = y1;
+                z2 = z1;
+            }, 150);
+        }
     }, 0)
 
     $scope.updateView = function () {
@@ -932,7 +989,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                     covers[c].style.height = coverHeight + (coverHeight * 0.05) + 'px';
                     covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
-                    covers[c].style.top = (window.innerWidth <= 768) ? coverHeight * -0.1 + 'px' : coverHeight * 0.1 + 'px';
+                    covers[c].style.top = coverHeight * 0.1 + 'px';
+                    coverParent.style.paddingBottom = coverHeight * 0.1 + 'px';
                     console.log(coverHeight + (coverHeight * 0.05) + 'px', coverWidth + (coverWidth * 0.05) + 'px');
                 }
             }
@@ -1198,7 +1256,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 //contact input vars
                 var email = document.getElementById('email'),
                     name = document.getElementById('name'),
-                    te = document.getElementById('text-area'),
+                    te = document.getElementById('message'),
                     submit = document.getElementById('submit');
 
                 // contact form input animation
@@ -1262,27 +1320,36 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 });
 
                 document.getElementById('contact').addEventListener('submit', function (e) {
-                    var dataArray = e.target.childNodes,
-                        dataSuccess = true;
+                    var dataArray = e.target,
+                        dataSuccess = true,
+                        jsonData = {};
+
                     for (var i = 0; i < dataArray.length - 1; i++) {
-                        var inputVal = dataArray[i].childNodes[0].value,
-                            inputLabel = dataArray[i].childNodes[1];
+                        var inputTarget = dataArray[i],
+                            inputVal = inputTarget.value,
+                            inputID = inputTarget.id,
+                            inputLabel = inputTarget.parentNode.childNodes[1];
+
+                        jsonData[inputID] = inputVal;
                         if (inputVal.length === 0) {
                             dataSuccess = false;
                             inputLabel.classList.add('error', 'focus');
                         }
                     }
+
                     if (dataSuccess) {
+                        console.log('dataSuccess');
                         var xhr = new XMLHttpRequest();
-                        xhr.open(e.method, '/contact', true);
-                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhr.open('POST', '/contact', true);
+                        xhr.setRequestHeader("Content-type", "application/json");
                         xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4 && xhr.status === 200) { // request sent & callback received
-                            } else {
+                            // Request sent & callback received
+                            // Send success message to user
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                $scope.createNotification(xhr.responseText);
                             }
                         }
-
-                        xhr.send(new FormData(e));
+                        xhr.send(JSON.stringify(jsonData));
                     }
                 });
 
@@ -1362,9 +1429,10 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 });
             }
             else {
-                // remove 'contact' and 'flat' tags if view !contact due to changes...
-                // in nav bar and light-mode positioning in contact view
-                if (window.outerWidth > $scope.mobileWidth) {
+                // Remove 'contact' and 'flat' tags if view !contact and window
+                // size is greater than set mobile width
+                // (change in nav bar and light-mode positioning in parallel view)
+                if (window.innerWidth > $scope.mobileWidth) {
                     navWrap[0].classList.remove('flat'); //  || top nav
                     navWrap[1].classList.remove('flat'); //  || bottom nav
                 }

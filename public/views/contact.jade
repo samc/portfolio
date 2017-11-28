@@ -9,17 +9,17 @@
             .cover
             h2(class='header info') Talk about new projects, freelance inquiry, or just a chat.
     .contact-form
-        form#contact(autocomplete="off" method="post" novalidate)
+        form#contact(autocomplete='off' novalidate)
                 .short
-                    input#name(placeholder="Name" type="text" name="name")
+                    input#name(placeholder='Name' type='text' name='name')
                     label
                 .short
-                    input#email(placeholder="Email" type="email" name="email")
+                    input#email(placeholder='Email' type='email' name='email')
                     label
                 .text-area
-                    textarea#text-area(placeholder="Message" name="message")
+                    textarea#message(placeholder='Message' name='message')
                     label
                 .submit
-                    input(id="submit" type="submit" class="submit-button error" value="SEND")
+                    input(id='submit' type='submit' class='submit-button error' value='SEND')
 .map-wrapper.v.normal.ng-cloak
     #map

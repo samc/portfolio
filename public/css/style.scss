@@ -20,6 +20,10 @@ h1, h2 {
   background: #57a3e4;
 }
 
+*:hover, *:active, *:focus {
+  outline: none;
+}
+
 //vars
 $color-orange: #fb856f;
 $color-blue: #57a3e4;
@@ -682,6 +686,7 @@ $nav-end-y: -44vw;
     }
     > .header-info-wrap {
       width: 96%;
+      margin-top: 1vh !important;
       > .cover {
         display: inline-block;
         position: absolute;
@@ -748,17 +753,11 @@ $nav-end-y: -44vw;
     width: 32vw;
     transform: none;
     -webkit-transform: none;
-    &.dark .header.last {
-      color: #707493;
-    }
     .header-info-wrap {
       display: inline-block;
       width: 100%;
     }
     .header {
-      &.first {
-        color: #66697E;
-      }
       &.middle {
         color: #57a3e4;
       }
@@ -920,11 +919,6 @@ input, textarea {
     top: 6vh;
     list-style: none;
     display: block;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-    -webkit-padding-start: 0;
     > .work-panel {
       overflow: hidden;
       cursor: pointer;
@@ -965,30 +959,35 @@ input, textarea {
           transform: scale(1.05) translateX(0.4vw);
         }
         .work-panel-cover {
-          right: -60vw;
+          right: 0;
         }
       }
       > .work-panel-slider {
         z-index: 12;
-        right: 0;
         position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: white;
         opacity: 1;
         transition: right $c-b-d .6s 1s;
+        width: 40vw ;
+        height: 0 ;
+        transform: none ;
+        top: 0 ;
+        right: -5vw;
+        border-top: solid white 35vh;
+        border-right: solid transparent 5vw;
       }
       > .work-panel-cover {
         z-index: 11;
         position: absolute;
-        right: -105vw;
-        top: 4vh;
-        width: 300%;
-        height: 300%;
-        background: linear-gradient(25deg, darken($color-blue, 80%), $color-blue);
         opacity: 0.6;
-        transform: rotate(25deg);
-        transition: right .8s $c-b-d;
+        transition: right 1s $c-b-d;
+        width: 40vw;
+        height: 0;
+        transform: none;
+        top: 0 ;
+        right: -40vw;
+        background: none;
+        border-bottom: solid #57A3E4 35vh;
+        border-left: solid transparent 5vw;
       }
       > .work-panel-mask {
         z-index: 9;
@@ -1034,7 +1033,7 @@ input, textarea {
       opacity: 0.4;
     }
     .work-panel-slider {
-      background-color: $color-secondary-dark;
+      border-top-color: $color-secondary-dark;
     }
   }
 }
@@ -1053,7 +1052,7 @@ input, textarea {
     > div {
       cursor: text;
       padding: 0;
-      margin-bottom: 10px;
+      margin-bottom: 2%;
       clear: both;
       position: relative;
       > input, textarea {
@@ -1067,27 +1066,28 @@ input, textarea {
         padding: 0 20px;
         box-sizing: border-box;
         transition: opacity $c-b-d .5s;
-        &:focus {
-          outline: 0;
-        }
         &.submit-button {
-          transition: margin-right $c-b-d 1s .3s;
+          transition: margin-right $c-b-d 1s .3s, color ease-in-out .1s;
           text-align: center;
           background-color: $color-main;
-          width: 3vw;
-          height: 3vh;
-          color: #57a3e4;
-          border-radius: 3px;
+          width: auto;
+          height: auto;
+          color: #f7f7f7;
+          border-radius: .1vw;
           float: right;
           margin-right: -8vw;
-          padding: 0;
+          padding: 0.7vh .5vw 0.5vh 0.7vw;
           letter-spacing: 3px;
-          line-height: 290%;
           cursor: pointer;
           -webkit-appearance: none;
+          &:hover {
+            color: #57a3e4;
+          }
           &.error {
-            color: #f7f7f7;
             cursor: not-allowed;
+            &:hover {
+              color: #f7f7f7;
+            }
           }
         }
       }
@@ -1174,9 +1174,15 @@ input, textarea {
     background-color: lighten(#1C1D25, 5%);
     color: lighten(#1C1D25, 25%);
     &.submit-button {
-      color: #57a3e4;
+      background-color: #e3e3e5;
+      &:hover {
+        color: #57a3e4;
+      }
       &.error {
         color: lighten(#1C1D25, 25%);
+        &:hover {
+          color: lighten(#1C1D25, 25%);
+        }
       }
     }
   }
@@ -1435,6 +1441,35 @@ input, textarea {
   display: none !important;
 }
 
+// Notification Styling
+
+#notification {
+  position: fixed;
+  background-color: $color-main;
+  opacity: 0.9;
+  left: -40vw;
+  bottom: 14vh;
+  text-align: right;
+  font: 600 2.6vh 'Khula', sans-serif;
+  color: white;
+  z-index: 999;
+  padding: .5vh 2vh;
+  vertical-align: middle;
+  transition: $c-b-d all 1s;
+  border-left: 0.2vw solid #57e459;
+  &.dark {
+    opacity: 0.6;
+    background-color: #000000;
+    color: #707493;
+  }
+  &.error {
+    border-left: 0.2vw solid #e41d00;
+  }
+  &.active {
+    left: 3vw;
+  }
+}
+
 // Phone & Tablet Styling
 
 @media only screen and (max-width: 768px) {
@@ -1461,10 +1496,10 @@ input, textarea {
     transform: translateX(-50%) translateY(-50%);
   }
   .view.about {
-    top: 48vh !important;
+    top: 49vh !important;
   }
   .view.skills {
-    top: 30vh !important;
+    top: 31vh !important;
   }
   .view.contact {
     width: 80vw !important;
@@ -1476,10 +1511,10 @@ input, textarea {
   }
   .header {
     &.big {
-      font-size: 10vw; //50px
+      font-size: 13vw; //50px
     }
     &.body {
-      font-size: 2.2vw;
+      font-size: 3.5vw;
       margin-left: 0 !important;
       padding-left: 2vw !important;
       width: 80vw !important; //320px
@@ -1487,7 +1522,7 @@ input, textarea {
     }
   }
   .header-info-wrap {
-    margin-top: 2vh !important;
+    margin-top: 1vh !important;
   }
   .header-container.home {
     width: 100vw !important;
@@ -1508,12 +1543,27 @@ input, textarea {
   .header-container.about {
     .header-content-body {
       margin-left: 0 !important;
-      .header.body {
-        padding-top: .5vh !important;
+      .header{
+        &.big {
+          font-size: 11vw !important;
+        }
+        &.body {
+          padding-top: .5vh !important;
+          font-size: 2.5vw !important;
+        }
       }
     }
   }
-
+  .header-container.skills {
+    .header{
+      &.big {
+        font-size: 11vw !important;
+      }
+      &.body {
+        font-size: 2.5vw !important;
+      }
+    }
+  }
   .header-container.contact {
     .header.info {
       font-size: 3vw;
@@ -1521,7 +1571,7 @@ input, textarea {
   }
   .skill-container {
     height: 35vh !important;
-    top: 65vh !important;
+    top: 68vh !important;
     width: 60vw !important;
   }
   #skill-wrap {
@@ -1627,11 +1677,16 @@ input, textarea {
   }
   .contact-form {
     width: 80vw !important;
+    input {
+      height: 8vh !important;
+    }
     input, textarea {
-      font-size: 2.2vw !important;
+      font-size: 3.2vw !important;
+      padding-left: 15px !important;
     }
     textarea {
       min-height: 24vh !important;
+      padding-top: 12px !important;
     }
     label {
       &:before, &:after {
@@ -1655,8 +1710,8 @@ input, textarea {
       }
     }
     #submit {
-      width: 13vw;
-      height: 5vh;
+      height: 5vh !important;
+      padding: 0.7vh .5vw 0.5vh 1vw !important;
     }
   }
   .skill-container.active-f > #skill-wrap {

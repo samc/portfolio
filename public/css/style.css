@@ -13,6 +13,9 @@ h1, h2 {
 *::selection {
   background: #57a3e4; }
 
+*:hover, *:active, *:focus {
+  outline: none; }
+
 * {
   box-sizing: border-box; }
 
@@ -475,7 +478,8 @@ nav.flat {
     transition: width 0.65s cubic-bezier(0.694, 0.048, 0.335, 1) 0.7s, left 0.2s cubic-bezier(0.694, 0.048, 0.335, 1) 0.5s;
     left: 100%; }
   .view > .header-container.contact > .header-info-wrap {
-    width: 96%; }
+    width: 96%;
+    margin-top: 1vh !important; }
     .view > .header-container.contact > .header-info-wrap > .cover {
       display: inline-block;
       position: absolute;
@@ -515,13 +519,9 @@ nav.flat {
     width: 32vw;
     transform: none;
     -webkit-transform: none; }
-    .view.contact.dark .header.last {
-      color: #707493; }
     .view.contact .header-info-wrap {
       display: inline-block;
       width: 100%; }
-    .view.contact .header.first {
-      color: #66697E; }
     .view.contact .header.middle {
       color: #57a3e4; }
     .view.contact .header.info {
@@ -651,12 +651,7 @@ input, textarea {
     left: 3vw;
     top: 6vh;
     list-style: none;
-    display: block;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-    -webkit-padding-start: 0; }
+    display: block; }
     .work-wrapper .work-list > .work-panel {
       overflow: hidden;
       cursor: pointer;
@@ -688,27 +683,32 @@ input, textarea {
       .work-wrapper .work-list > .work-panel:hover .work-panel-header {
         transform: scale(1.05) translateX(0.4vw); }
       .work-wrapper .work-list > .work-panel:hover .work-panel-cover {
-        right: -60vw; }
+        right: 0; }
       .work-wrapper .work-list > .work-panel > .work-panel-slider {
         z-index: 12;
-        right: 0;
         position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: white;
         opacity: 1;
-        transition: right cubic-bezier(0.03, 0.88, 0.33, 0.98) 0.6s 1s; }
+        transition: right cubic-bezier(0.03, 0.88, 0.33, 0.98) 0.6s 1s;
+        width: 40vw;
+        height: 0;
+        transform: none;
+        top: 0;
+        right: -5vw;
+        border-top: solid white 35vh;
+        border-right: solid transparent 5vw; }
       .work-wrapper .work-list > .work-panel > .work-panel-cover {
         z-index: 11;
         position: absolute;
-        right: -105vw;
-        top: 4vh;
-        width: 300%;
-        height: 300%;
-        background: linear-gradient(25deg, black, #57a3e4);
         opacity: 0.6;
-        transform: rotate(25deg);
-        transition: right 0.8s cubic-bezier(0.03, 0.88, 0.33, 0.98); }
+        transition: right 1s cubic-bezier(0.03, 0.88, 0.33, 0.98);
+        width: 40vw;
+        height: 0;
+        transform: none;
+        top: 0;
+        right: -40vw;
+        background: none;
+        border-bottom: solid #57A3E4 35vh;
+        border-left: solid transparent 5vw; }
       .work-wrapper .work-list > .work-panel > .work-panel-mask {
         z-index: 9;
         position: absolute;
@@ -743,7 +743,7 @@ input, textarea {
     .work-wrapper.dark .work-panel .work-panel-mask {
       opacity: 0.4; }
     .work-wrapper.dark .work-panel .work-panel-slider {
-      background-color: #15151e; }
+      border-top-color: #15151e; }
 
 .work-panel:nth-child(2) {
   margin-left: 29.5vw;
@@ -763,7 +763,7 @@ input, textarea {
   .contact-form form > div {
     cursor: text;
     padding: 0;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
     clear: both;
     position: relative; }
     .contact-form form > div > input, .contact-form form > div textarea {
@@ -777,26 +777,26 @@ input, textarea {
       padding: 0 20px;
       box-sizing: border-box;
       transition: opacity cubic-bezier(0.03, 0.88, 0.33, 0.98) 0.5s; }
-      .contact-form form > div > input:focus, .contact-form form > div textarea:focus {
-        outline: 0; }
       .contact-form form > div > input.submit-button, .contact-form form > div textarea.submit-button {
-        transition: margin-right cubic-bezier(0.03, 0.88, 0.33, 0.98) 1s 0.3s;
+        transition: margin-right cubic-bezier(0.03, 0.88, 0.33, 0.98) 1s 0.3s, color ease-in-out 0.1s;
         text-align: center;
         background-color: #4c4f65;
-        width: 3vw;
-        height: 3vh;
-        color: #57a3e4;
-        border-radius: 3px;
+        width: auto;
+        height: auto;
+        color: #f7f7f7;
+        border-radius: .1vw;
         float: right;
         margin-right: -8vw;
-        padding: 0;
+        padding: 0.7vh .5vw 0.5vh 0.7vw;
         letter-spacing: 3px;
-        line-height: 290%;
         cursor: pointer;
         -webkit-appearance: none; }
+        .contact-form form > div > input.submit-button:hover, .contact-form form > div textarea.submit-button:hover {
+          color: #57a3e4; }
         .contact-form form > div > input.submit-button.error, .contact-form form > div textarea.submit-button.error {
-          color: #f7f7f7;
           cursor: not-allowed; }
+          .contact-form form > div > input.submit-button.error:hover, .contact-form form > div textarea.submit-button.error:hover {
+            color: #f7f7f7; }
     .contact-form form > div.short {
       width: 49%;
       float: left;
@@ -855,9 +855,13 @@ input, textarea {
   background-color: #272834;
   color: #53566e; }
   .view.dark .contact-form > form > div > input.submit-button, .view.dark .contact-form > form > div textarea.submit-button {
-    color: #57a3e4; }
+    background-color: #e3e3e5; }
+    .view.dark .contact-form > form > div > input.submit-button:hover, .view.dark .contact-form > form > div textarea.submit-button:hover {
+      color: #57a3e4; }
     .view.dark .contact-form > form > div > input.submit-button.error, .view.dark .contact-form > form > div textarea.submit-button.error {
       color: #53566e; }
+      .view.dark .contact-form > form > div > input.submit-button.error:hover, .view.dark .contact-form > form > div textarea.submit-button.error:hover {
+        color: #53566e; }
 
 .map-wrapper {
   border: 3px solid #4c4f65;
@@ -1095,6 +1099,29 @@ input, textarea {
 .skill .ng-move, .skill .ng-move-active {
   display: none !important; }
 
+#notification {
+  position: fixed;
+  background-color: #4c4f65;
+  opacity: 0.9;
+  left: -40vw;
+  bottom: 14vh;
+  text-align: right;
+  font: 600 2.6vh 'Khula', sans-serif;
+  color: white;
+  z-index: 999;
+  padding: .5vh 2vh;
+  vertical-align: middle;
+  transition: cubic-bezier(0.03, 0.88, 0.33, 0.98) all 1s;
+  border-left: 0.2vw solid #57e459; }
+  #notification.dark {
+    opacity: 0.6;
+    background-color: #000000;
+    color: #707493; }
+  #notification.error {
+    border-left: 0.2vw solid #e41d00; }
+  #notification.active {
+    left: 3vw; }
+
 @media only screen and (max-width: 768px) {
   .view.home {
     display: inline-block;
@@ -1118,10 +1145,10 @@ input, textarea {
     transform: translateX(-50%) translateY(-50%); }
 
   .view.about {
-    top: 48vh !important; }
+    top: 49vh !important; }
 
   .view.skills {
-    top: 30vh !important; }
+    top: 31vh !important; }
 
   .view.contact {
     width: 80vw !important;
@@ -1132,15 +1159,15 @@ input, textarea {
     width: .4vw !important; }
 
   .header.big {
-    font-size: 10vw; }
+    font-size: 13vw; }
   .header.body {
-    font-size: 2.2vw;
+    font-size: 3.5vw;
     margin-left: 0 !important;
     padding-left: 2vw !important;
     width: 80vw !important; }
 
   .header-info-wrap {
-    margin-top: 2vh !important; }
+    margin-top: 1vh !important; }
 
   .header-container.home {
     width: 100vw !important;
@@ -1157,15 +1184,23 @@ input, textarea {
 
   .header-container.about .header-content-body {
     margin-left: 0 !important; }
+    .header-container.about .header-content-body .header.big {
+      font-size: 11vw !important; }
     .header-container.about .header-content-body .header.body {
-      padding-top: .5vh !important; }
+      padding-top: .5vh !important;
+      font-size: 2.5vw !important; }
+
+  .header-container.skills .header.big {
+    font-size: 11vw !important; }
+  .header-container.skills .header.body {
+    font-size: 2.5vw !important; }
 
   .header-container.contact .header.info {
     font-size: 3vw; }
 
   .skill-container {
     height: 35vh !important;
-    top: 65vh !important;
+    top: 68vh !important;
     width: 60vw !important; }
 
   #skill-wrap {
@@ -1253,10 +1288,14 @@ input, textarea {
 
   .contact-form {
     width: 80vw !important; }
+    .contact-form input {
+      height: 8vh !important; }
     .contact-form input, .contact-form textarea {
-      font-size: 2.2vw !important; }
+      font-size: 3.2vw !important;
+      padding-left: 15px !important; }
     .contact-form textarea {
-      min-height: 24vh !important; }
+      min-height: 24vh !important;
+      padding-top: 12px !important; }
     .contact-form label:before, .contact-form label:after {
       border-width: .4vh !important; }
     .contact-form label.error:after {
@@ -1266,8 +1305,8 @@ input, textarea {
     .contact-form .text-area label.focus:after, .contact-form .text-area label.focus:before, .contact-form .text-area label.error:after {
       width: 80vw; }
     .contact-form #submit {
-      width: 13vw;
-      height: 5vh; }
+      height: 5vh !important;
+      padding: 0.7vh .5vw 0.5vh 1vw !important; }
 
   .skill-container.active-f > #skill-wrap {
     margin-top: 0 !important; } }
