@@ -24,7 +24,7 @@
 
  **/
 
-var Delaunay;
+var Triangle;
 
 (function() {
     "use strict";
@@ -127,7 +127,7 @@ var Delaunay;
         }
     }
 
-    Delaunay = {
+    Triangle = {
         triangulate: function(vertices, key) {
             var n = vertices.length,
                 i, j, indices, st, open, closed, edges, dx, dy, a, b, c;
@@ -165,7 +165,7 @@ var Delaunay;
             /* Initialize the open list (containing the supertriangle and nothing
              * else) and the closed list (which is empty since we havn't processed
              * any triangles yet). */
-            open   = [circumcircle(vertices, n + 0, n + 1, n + 2)];
+            open   = [circumcircle(vertices, n, n + 1, n + 2)];
             closed = [];
             edges  = [];
 
@@ -256,7 +256,7 @@ var Delaunay;
     };
 
     if(typeof module !== "undefined")
-        module.exports = Delaunay;
+        module.exports = Triangle;
 })();
 
 /**
@@ -302,7 +302,7 @@ FSS.Utils = {
     }
 
     if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
+        window.requestAnimationFrame = function(callback) {
             var currentTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currentTime - lastTime));
             var id = window.setTimeout(function() {
@@ -517,7 +517,7 @@ FSS.Vector3 = {
  * @author Matthew Wagerfield
  */
 FSS.Vector4 = {
-    create: function(x, y, z, w) {
+    create: function(x, y, z) {
         var vector = new FSS.Array(4);
         this.set(vector, x, y, z);
         return vector;
@@ -739,7 +739,7 @@ FSS.Plane = function(width, height, howmany) {
     this.height = height || 100;
 
     // Cache Variables
-    var x, y, vertices = new Array(howmany);
+    var x, y, vertices = new Array(howmany),
     offsetX = this.width * -0.5,
         offsetY = this.height * 0.5;
 
@@ -769,7 +769,7 @@ FSS.Plane = function(width, height, howmany) {
     }
 
     // Create an array of triangulated coordinates from our vertices
-    var triangles = Delaunay.triangulate(vertices);
+    var triangles = Triangle.triangulate(vertices);
 
     for(i = triangles.length; i; ) {
         --i;
@@ -779,7 +779,7 @@ FSS.Plane = function(width, height, howmany) {
         --i;
         var p3 = [Math.ceil(vertices[triangles[i]][0]), Math.ceil(vertices[triangles[i]][1])];
 
-        t1 = new FSS.Triangle(new FSS.Vertex(p1[0],p1[1]), new FSS.Vertex(p2[0],p2[1]), new FSS.Vertex(p3[0],p3[1]));
+        var t1 = new FSS.Triangle(new FSS.Vertex(p1[0],p1[1]), new FSS.Vertex(p2[0],p2[1]), new FSS.Vertex(p3[0],p3[1]));
         this.triangles.push(t1);
     }
 };

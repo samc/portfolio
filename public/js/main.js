@@ -1,4 +1,4 @@
-require("./triangles");
+require('./triangles');
 require('../css/style.css');
 require('../images/logoMarkerDark.svg');
 require('../images/logoMarkerLight.svg');
@@ -154,7 +154,6 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: transitionDelay
         });
 
-
     $locationProvider.html5Mode(true);
 })
 
@@ -162,7 +161,7 @@ app.config(function ($routeProvider, $locationProvider) {
 var transitionDelay = {
     delay: function ($q, $timeout) {
         var delay = $q.defer();
-        $timeout(delay.resolve, 2000);
+        $timeout(delay.resolve, 600);
         return delay.promise;
     }
 }
@@ -212,17 +211,15 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 outline.style.visibility = 'hidden';
                 outline.classList.remove('active');
             }, 'shutterStart+=0.5')
-            // reveal background
+            // reveal background and nav bars
             .add(function () {
                 document.getElementById('background').classList.add('active');
-                document.querySelector('.nav-bottom').classList.remove('paused');
-                document.querySelector('.nav-top').classList.remove('paused');
+                document.querySelector('.nav-bottom').classList.add('transition', 'active');
+                document.querySelector('.nav-top').classList.add('transition', 'active');
+
             }, 'shutterStart+=1.8')
-            // reveal nav bars
-            // .to(document.querySelectorAll('nav'), 1, {animationPlayState: 'running'}, 'shutterStart+=1.8')
-            // .to(document.querySelectorAll('nav'), 1, {WebkitAnimationPlayState: 'running'}, 'shutterStart+=1.8')
             // reveal nav icons
-            .to(document.querySelectorAll('.nav-icon'), 1, {opacity: 1}, 'shutterStart+=3.3')
+            .to(document.querySelectorAll('.nav-icon'), 0, {opacity: 1}, 'shutterStart+=2.8')
             // hide transition sliders
             .to(slider, 1, {visibility: 'hidden'}, 'shutterStart+=3.0')
             // reveal light mode button
@@ -251,22 +248,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //------------------------------
 
         (function () {
-
             var isDark = $scope.isDark();
-
-            //------------------------------
-            // Mesh Properties
-            //------------------------------
-
             var MESH = {
                 width: 1.2,
                 height: 1.2,
                 slices: 250
             };
-
-            //------------------------------
-            // Light Properties
-            //------------------------------
             var LIGHT = {
                 count: 1,
                 xPos: 0,
@@ -276,73 +263,60 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 proxy: false,
                 currIndex: 0
             };
-
             var setBGColor = function () {
-
                 if (isDark) {
                     MESH.ambient = '#4c4f65';
                     MESH.diffuse = '#ffffff';
                     LIGHT.ambient = '#1c1d25';
-                    LIGHT.diffuse = '#4c4f65';
-
+                    LIGHT.diffuse = '#4c4f65'
                 } else {
                     MESH.ambient = '#ffffff';
                     MESH.diffuse = '#4c4f65';
                     LIGHT.ambient = '#D8D8D8';
-                    LIGHT.diffuse = '#D8D8D8';
+                    LIGHT.diffuse = '#D8D8D8'
                 }
-            }
-
+            };
             setBGColor();
-
-
-            //------------------------------
-            // Global Properties
-            //------------------------------
-
             var center = FSS.Vector3.create();
-            var container = document.getElementById('background')
+            var container = document.getElementById('background');
             var output = document.getElementById('output');
-            var renderer, scene, mesh, geometry, material,
-                canvasRenderer, light;
-
-            //------------------------------
-            // Methods
-            //------------------------------
+            var renderer,
+                scene,
+                mesh,
+                geometry,
+                material,
+                canvasRenderer,
+                light,
+                hasBeenRendered;
             function initialise() {
                 createRenderer();
                 createScene();
                 createMesh();
                 addLight();
-                addEventListeners();
                 resize(container.offsetWidth, container.offsetHeight);
-                animate();
+                animate()
+                hasBeenRendered = true;
             }
-
             function createRenderer() {
-                canvasRenderer = new FSS.CanvasRenderer();
+                canvasRenderer = new FSS.CanvasRenderer;
                 if (renderer) {
-                    output.removeChild(renderer.element);
+                    output.removeChild(renderer.element)
                 }
-                renderer = canvasRenderer
+                renderer = canvasRenderer;
                 renderer.setSize(container.offsetWidth, container.offsetHeight);
-                output.appendChild(renderer.element);
+                output.appendChild(renderer.element)
             }
-
             function createScene() {
-                scene = new FSS.Scene();
+                scene = new FSS.Scene
             }
-
             function createMesh() {
                 scene.remove(mesh);
                 renderer.clear();
                 geometry = new FSS.Plane(MESH.width * renderer.width, MESH.height * renderer.height, MESH.slices);
                 material = new FSS.Material(MESH.ambient, MESH.diffuse);
                 mesh = new FSS.Mesh(geometry, material);
-                scene.add(mesh);
+                scene.add(mesh)
             }
-
-            // Add a single light
             function addLight() {
                 renderer.clear();
                 light = new FSS.Light(LIGHT.ambient, LIGHT.diffuse);
@@ -352,66 +326,64 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 scene.add(light);
                 LIGHT.proxy = light;
                 LIGHT.pickedup = true;
-                LIGHT.currIndex++;
+                LIGHT.currIndex++
             }
-
-            // Resize canvas
             function resize(width, height) {
                 renderer.setSize(width, height);
                 FSS.Vector3.set(center, renderer.halfWidth, renderer.halfHeight);
-                createMesh();
+                createMesh()
             }
-
             function animate() {
                 render();
-                requestAnimationFrame(animate);
+                requestAnimationFrame(animate)
             }
-
             function render() {
-                renderer.render(scene);
+                renderer.render(scene)
             }
-
             function addEventListeners() {
                 window.addEventListener('resize', onWindowResize);
                 window.addEventListener('mousemove', onMouseMove);
-                document.getElementById('light-mode').addEventListener('click', function () {
+                container.addEventListener('togglecolor', function () {
                     isDark = !isDark;
                     setBGColor();
                     createRenderer();
                     createScene();
                     createMesh();
-                    addLight();
+                    addLight()
                 });
             }
-
-            //------------------------------
-            // Callbacks
-            //------------------------------
-
             function onWindowResize() {
-                resize(container.offsetWidth, container.offsetHeight);
-                render();
+                if (window.innerWidth > $scope.mobileWidth){
+                    container.classList.add('active');
+                    if (hasBeenRendered) {
+                        resize(container.offsetWidth, container.offsetHeight);
+                        render()
+                    } else initialise();
+                } else container.classList.remove('active');
             }
-
             function onMouseMove(event) {
-                if (LIGHT.pickedup) {
-                    LIGHT.xPos = event.x - renderer.width / 2;
-                    LIGHT.yPos = renderer.height / 2 - event.y;
-                    LIGHT.proxy.setPosition(LIGHT.xPos, LIGHT.yPos, LIGHT.proxy.position[2]);
+                if (window.innerWidth > $scope.mobileWidth) {
+                    if (LIGHT.pickedup) {
+                        LIGHT.xPos = event.x - renderer.width / 2;
+                        LIGHT.yPos = renderer.height / 2 - event.y;
+                        LIGHT.proxy.setPosition(LIGHT.xPos, LIGHT.yPos, LIGHT.proxy.position[2])
+                    }
                 }
             }
+            if (window.innerWidth > $scope.mobileWidth) initialise();
+            addEventListeners();
+        }) ();
 
-            // Let there be light!
-            initialise();
-
-        })();
-
-        $scope.changeView = function (route) {
+        $scope.changeView = function(route) {
 
             $scope.hasChangedView = true;
 
+            console.log(route);
+
             // only change view if current view and selected view are different
             if (!($scope.currentView === '/' + route)) {
+
+                console.log('success : ' + route);
 
                 //------------------------------
                 // Transition Animations
@@ -422,25 +394,24 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.getElementById('background').classList.add('transition');
 
                 var navBanners = document.getElementsByTagName('NAV'),
-                    viewChildren = document.getElementById('view-container').childNodes,
-                    transitionSliders = document.querySelector('.transition-sliders');
+                    viewChildren = document.getElementById('view-container').childNodes;
+                //transitionSliders = document.querySelector('.transition-sliders');
 
                 for (var c = 0; c < viewChildren.length; c++) {
                     viewChildren[c].classList.remove('active');
                 }
 
                 for (var b = 0; b < navBanners.length; b++) {
-                    navBanners[b].classList.remove('in');
-                    navBanners[b].classList.add('out');
+                    navBanners[b].classList.remove('active');
                 }
 
-                // show sliders before animation start
-                transitionSliders.style.visibility = 'visible';
-                // hide sliders after animation is complete
-                $timeout(function () {
-                    document.querySelector('.transition-sliders').style.visibility = 'hidden';
-                }, 2600); // last slider leaves frame after 2.6s (1.9s duration + .7s delay)
-                transitionSliders.classList.toggle('active');
+                // // show sliders before animation start
+                // transitionSliders.style.visibility = 'visible';
+                // // hide sliders after animation is complete
+                // $timeout(function () {
+                //     document.querySelector('.transition-sliders').style.visibility = 'hidden';
+                // }, 2600); // last slider leaves frame after 2.6s (1.9s duration + .7s delay)
+                // transitionSliders.classList.toggle('active');
 
                 // set uri reference for view specific animations
                 $scope.referrer = $location.path();
@@ -498,6 +469,13 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 currentViewEl.childNodes[v].classList.toggle('dark');
             }
         }
+        $scope.toggleLocalStorage = function() {
+            if (localStorage.getItem('color') === null) {
+                localStorage.setItem('color', 'dark');
+            } else {
+                localStorage.removeItem('color');
+            }
+        }
 
         // var shakeCounter = 0,
         //     prevMouseX = 0,
@@ -543,13 +521,24 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //     }, 100);
         // };
 
-        document.getElementById('light-mode').addEventListener('click', function () {
-            if (localStorage.getItem('color') === null) {
-                localStorage.setItem('color', 'dark');
-            } else {
-                localStorage.removeItem('color');
-            }
+        var background = document.getElementById('background'),
+            toggleBackgroundColorEvent = new Event('togglecolor');
+
+        document.getElementById('light-mode').addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            $scope.toggleLocalStorage();
             $scope.toggleColors();
+            background.dispatchEvent(toggleBackgroundColorEvent);
+        });
+        document.getElementById('light-mode').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                $scope.toggleLocalStorage();
+                $scope.toggleColors();
+                background.dispatchEvent(toggleBackgroundColorEvent);
+            }
         })
 
         if (localStorage.getItem('color') === 'dark' && !$scope.hasChangedView) {
@@ -560,13 +549,13 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         // Notification Creation
         //------------------------------
 
-        $scope.createNotification = function(message){
+        $scope.createNotification = function (message) {
             var notification = document.getElementById('notification');
 
             notification.innerHTML = message;
             notification.classList.add('active');
 
-            $timeout(function(){
+            $timeout(function () {
                 notification.classList.remove('active');
             }, 5000);
         }
@@ -611,12 +600,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // Periodically check the position and fire
             // if the change is greater than the sensitivity
             setInterval(function () {
-                var change = Math.abs(x1-x2+y1-y2+z1-z2);
+                var change = Math.abs(x1 - x2 + y1 - y2 + z1 - z2);
 
                 if (change > sensitivity && !active) {
                     document.getElementById('light-mode').dispatchEvent(new MouseEvent('click'));
                     active = true;
-                    setTimeout(function(){
+                    setTimeout(function () {
                         active = false;
                     }, 2000)
                 }
@@ -632,7 +621,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
     $scope.updateView = function () {
         var viewChildrenNew = document.getElementById('view-container').childNodes;
         for (var n = 0; n < viewChildrenNew.length; n++) {
-            viewChildrenNew[n].classList.add('active', 'active-f');
+            viewChildrenNew[n].classList.add('active');
+            viewChildrenNew[n].classList.add('active-f');
             if (localStorage.getItem('color') === 'dark')
                 viewChildrenNew[n].classList.add('dark');
         }
@@ -962,45 +952,54 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
     // angular view callback load function, anything regarding manipulation of the...
     // different views is handled here
+
     $scope.$on('$viewContentLoaded', function () {
+
+        console.log('viewContentLoaded')
+
+
+        // Remove :focus from element to prevent title from displaying
+        // if tab was used to navigate
+        document.activeElement.blur();
+
+        function adjustHeaderCovers() {
+
+            var covers = document.querySelectorAll('.cover');
+
+            for (var c = 0; c < covers.length; c++) {
+                var coverParent = covers[c].parentNode,
+                    coverHeight = parseInt(window.getComputedStyle(coverParent, null).getPropertyValue('height')),
+                    coverWidth = parseInt(window.getComputedStyle(coverParent, null).getPropertyValue('width'));
+
+                covers[c].style.height = coverHeight + (coverHeight * 0.05) + 'px';
+                covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
+                covers[c].style.top = coverHeight * 0.1 + 'px';
+                coverParent.style.paddingBottom = coverHeight * 0.1 + 'px';
+            }
+        }
+
+
+        adjustHeaderCovers();
+        $window.addEventListener('resize', adjustHeaderCovers);
 
         $timeout(function () {
 
-            function adjustViewSliderAnimations() {
+            function adjustContentSliders() {
 
-                var bodies = document.querySelectorAll('.header.body'),
-                    covers = document.querySelectorAll('.cover');
+                var bodies = document.querySelectorAll('.header.body');
 
                 for (var b = 0; b < bodies.length; b++) {
                     var bodyHeight = parseInt(window.getComputedStyle(bodies[b], null).getPropertyValue('height'));
-                    bodies[b].parentNode.style.height = bodyHeight - (bodyHeight * 0.05) + 'px';
-                }
-                for (var c = 0; c < covers.length; c++) {
-                    var coverParent = covers[c].parentNode,
-                        coverHeight = parseInt(window.getComputedStyle(coverParent,  null).getPropertyValue('height')),
-                        coverWidth = parseInt(window.getComputedStyle(coverParent,  null).getPropertyValue('width'));
-
-                    covers[c].style.height = coverHeight + (coverHeight * 0.05) + 'px';
-                    covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
-                    covers[c].style.top = coverHeight * 0.1 + 'px';
-                    coverParent.style.paddingBottom = coverHeight * 0.1 + 'px';
+                    bodies[b].parentNode.style.height = bodyHeight - bodyHeight * .05 + 'px';
                 }
             }
 
-            adjustViewSliderAnimations();
-            $window.addEventListener('resize', adjustViewSliderAnimations);
+
+            adjustContentSliders();
+            $window.addEventListener('resize', adjustContentSliders);
 
             if (localStorage.getItem('color') === 'dark' && !$scope.hasChangedView) {
                 $scope.toggleViewColors();
-            }
-
-            var navBanners = document.querySelectorAll('nav');
-            if ($scope.hasChangedView) {
-                for (var b = 0; b < navBanners.length; b++) {
-                    navBanners[b].classList.remove('out');
-                    navBanners[b].classList.add('in');
-                    if (window.outerWidth <= $scope.mobileWidth) navBanners[b].classList.add('flat');
-                }
             }
 
             // set active nav icon
@@ -1097,14 +1096,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                         skillFocused.classList.remove('active');
 
                         function animateScroll(scrollDis, callback) {
-                            var curTop = parseFloat(skillWrap.style.top),
-                                curLeft = parseFloat(skillWrap.style.left),
-                                curLeftTop = (window.innerWidth <= 768) ? curTop + (scrollDis * 7) : curTop + (scrollDis * 8),
-                                curLeftFinal = (window.innerWidth <= 768) ? 0 : curLeft + (-(scrollDis) * 4);
-                            tween(skillWrap, {
-                                top: curLeftTop,
-                                left: curLeftFinal
-                            }, 1, callback, Quad_easeInOut);
+                            var curLeftTop = (window.innerWidth <= $scope.mobileWidth) ? scrollDis * 7 : scrollDis * 8,
+                                curLeftFinal = (window.innerWidth <= $scope.mobileWidth) ? 0 : scrollDis * 4;
+                            tween(skillWrap, -curLeftFinal, curLeftTop, 1, callback);
                         }
 
                         function scrollUp() {
@@ -1223,24 +1217,29 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }, 3000)
             }
 
-            //work route handler
-            // if($location.path() === '/work'){
-            //
-            //     var workPanels = document.getElementsByClassName('work-panel');
-            //
-            //     for (var p = 0; p < workPanels.length; p++){
-            //         workPanels[p].addEventListener('click', function(e){
-            //             var clickedPanel = this;
-            //             console.log(clickedPanel)
-            //             for (var p = 0; p < workPanels.length; p++){
-            //                 workPanels[p].classList.remove('active');
-            //                 console.log((workPanels[p] === clickedPanel));
-            //                 if (workPanels[p] === clickedPanel)
-            //                     workPanels[p].classList.add('active');
-            //             }
-            //         })
-            //     }
-            // }
+            // work route handler
+            if($location.path() === '/work'){
+
+                var workContainer = document.querySelector('.work-container'),
+                    workWrapper = workContainer.parentNode;
+
+                workContainer.addEventListener('scroll', function(){
+                    if (window.innerWidth <= $scope.mobileWidth){
+                        console.log(workContainer.scrollTop, workContainer.clientHeight, workContainer.clientTop, workContainer.offsetHeight, workContainer.scrollHeight);
+                        if (workContainer.scrollTop !== 0){
+                            if(workContainer.scrollHeight - workContainer.offsetHeight === workContainer.scrollTop){
+                                workWrapper.classList.add('fade-top');
+                            }
+                            else {
+                                workWrapper.classList.add('fade-top-bottom');
+                                workWrapper.classList.remove('fade-top');
+                            }
+                        }
+                        else workWrapper.classList.remove('fade-top', 'fade-top-bottom');
+                    }
+                })
+
+            }
 
             // contact route handler
             if ($location.path() === '/contact') {
@@ -1344,8 +1343,16 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 });
 
-                navWrap[0].classList.add('flat'); // top nav
-                navWrap[1].classList.add('flat'); // bottom nav
+                for (var f = 0; f < navWrap.length; f++) {
+                    navWrap[f].classList.add('flat');
+                }
+
+                $timeout(function () {
+                    for (var t = 0; t < navWrap.length; t++) {
+                        navWrap[t].classList.add('transition', 'active');
+                    }
+                }, 0)
+
                 lightMode.classList.add('contact'); // light mode
 
                 var uluru = {lat: 27.791959, lng: -82.723924};
@@ -1423,37 +1430,47 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 // Remove 'contact' and 'flat' tags if view !contact and window
                 // size is greater than set mobile width
                 // (change in nav bar and light-mode positioning in parallel view)
-                if (window.innerWidth > $scope.mobileWidth) {
-                    navWrap[0].classList.remove('flat'); //  || top nav
-                    navWrap[1].classList.remove('flat'); //  || bottom nav
+                lightMode.classList.remove('contact');
+
+                if ($scope.hasChangedView) {
+                    for (var w = 0; w < navWrap.length; w++) {
+                        if (window.innerWidth <= $scope.mobileWidth) {
+                            navWrap[w].classList.add('flat', 'transition');
+                        } else navWrap[w].classList.remove('flat');
+                    }
+                    $timeout(function () {
+                        for (var w = 0; w < navWrap.length; w++) {
+                            navWrap[w].classList.add('transition', 'active');
+                        }
+                    }, 100)
                 }
-                lightMode.classList.remove('contact'); //   || light mode
             }
 
+            // trigger nav transition animations
             if ($scope.hasChangedView) {
-                // view change specific animations
-                $timeout(function () {
-                    $scope.updateView()
-                }, 0);
+                if (window.innerWidth > $scope.mobileWidth) {
+                    for (var n = 0; n < navWrap.length; n++) {
+                        navWrap[n].classList.remove('transition');
+                    }
+                }
+                $scope.updateView();
                 lightMode.classList.add('active');
                 document.getElementById('background').classList.remove('transition');
             }
-        })
-    }, 0)
-})
+        }, 600)
+    })
+});
 
-function tween(o, props, durationSecs, onComplete, ease) {
-    var fps = 30, count = 0, stopAt = fps * durationSecs, startVals = {}, endVals = {}, easef = ease || Quad_easeOut;
-    for (var p in props) startVals[p] = tween_getProperty(o, p);
-    for (var p in props) endVals[p] = props[p];
+
+function tween(o, x, y,  durationSecs, onComplete) {
+    var fps = 30, count = 0, stopAt = fps * durationSecs, easef = Quad_easeInOut;
     var f = function () {
         count++;
         if (count >= stopAt) {
             tween_stop(o);
-            tween_setProps(o, endVals);
             if (onComplete) onComplete();
         } else {
-            for (var p in props) tween_setProperty(o, p, easef(count, startVals[p], endVals[p] - startVals[p], stopAt));
+            tween_setProperty(o, easef(count, 0, x, stopAt), easef(count, 0, y, stopAt));
         }
     };
     clearInterval(o._tween_int);
@@ -1464,36 +1481,12 @@ function tween_stop(o) {
     clearInterval(o._tween_int);
 }
 
-function tween_setProps(o, props) {
-    for (var p in props) tween_setProperty(o, p, props[p]);
-}
-
-function tween_setProperty(o, p, value) {
-    if (p === 'top') o.style.cssText += ';' + p + ':' + value + 'vh !important' + ';'; // top
-    else o.style.cssText += ';' + p + ':' + value + 'vw !important' + ';'; // bottom
-}
-
-function tween_getProperty(o, p) {
-    return parseFloat(o.style[p]);
-}
-
-//R.Penner Quart easing t=time,b=start,c=delta,d=duration
-function Quad_easeIn(t, b, c, d) {
-    return c * (t /= d) * t * t * t + b;
-}
-
-function Quad_easeOut(t, b, c, d) {
-    return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+function tween_setProperty(o, x, y) {
+    console.log(x, y)
+    o.style.cssText += ';transform:translate3d(' + x + 'vw,' + y +'vh,0);' ;
 }
 
 function Quad_easeInOut(t, b, c, d) {
     if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
     return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
-}
-
-DOMTokenList.prototype.addMany = function (classes) {
-    var array = classes.split(' ');
-    for (var i = 0, length = array.length; i < length; i++) {
-        this.add(array[i]);
-    }
 }
