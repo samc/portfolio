@@ -1,27 +1,53 @@
 doctype html
 html(ng-app='app' lang='en')
-    head
+    head(itemscope itemtype='http://schema.org/Website')
+
         script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")
+
         meta(charset='UTF-8')
         meta(http-equiv='X-UA-Compatible' content='IE-edge,chrome=1')
         title Sam Craig - Full Stack Web Developer
-        meta(name='description' content="Sam Craig's personal portfolio webiste")
+        meta(name='description' content="Sam Craig's personal portfolio website")
         meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
-        //link(rel='stylesheet', href='css/style.css')
+        meta(name='HandheldFriendly' content='True')
+        meta(name='msapplication-tap-highlight' content='no')
+        link(rel='canonical' href='https://samcraig.io')
+        link(type='text/plain' rel='author' href='humans.txt')
+
+        meta(itemprop='name' content='Sam Craig - Full Stack Web Developer')
+        meta(itemprop='description' content="Sam Craig's personal portfolio website")
+        meta(itemprop='image' content='https://samcraig.io')
+
+        meta(name='apple-mobile-web-app-capable' content='yes')
+        meta(name='apple-mobile-web-app-status-bar-style' content='black-translucent')
+        meta(name='apple-mobile-web-app-title' content='Sam Craig - Full Stack Web Developer')
+
+        meta(property='og:url' content='https://samcraig.io')
+        meta(property='og:type' content='website')
+        meta(property='og:title' content='Sam Craig - Full Stack Web Developer')
+        meta(property='og:description' content="Sam Craig's personal portfolio website")
+        meta(property='og:image' content='https://samcraig.io/public/images/favicon.png')
+
+        meta(name='twitter:card' content='summary_large_image')
+        meta(name='twitter:site' content='@SamCraig')
+        meta(name='twitter:creator' content='@SamCraig')
+        meta(name='twitter:title' content='Sam Craig - Full Stack Web Developer')
+        meta(name='twitter:description' content="Sam Craig's personal portfolio website")
+        meta(name='twitter:url' content="https://samcraig.io")
+        meta(name='twitter:image' content='https://samcraig.io/public/images/favicon.png')
+
         link(rel='stylesheet', href='dist/style.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.js')
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenLite.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TimelineLite.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/plugins/CSSPlugin.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/easing/EasePack.min.js")
-        //script(src='js/main.js')
-        //script(src='js/triangles.js')
-        //script(src='js/tween.js')
         script(src='dist/build.js')
         base(href='/')
-    body(id="scope" ng-controller='view')
+    body(id="scope" ng-controller='view' itemscope itemtype='http://schema.org/Webpage')
         .site-loader.active
             span.line.top
             span.line.right
@@ -47,7 +73,7 @@ html(ng-app='app' lang='en')
                     g(clip-path='url(#moonFillClip)')
                         path(d='M50,61.998c-6.627,0-11.999-5.372-11.999-11.998c0-6.627,5.372-11.999,11.999-11.999c0.755,0,1.491,0.078,2.207,0.212c-0.132,0.576-0.208,1.173-0.208,1.788c0,4.418,3.582,7.999,8,7.999c0.614,0,1.212-0.076,1.788-0.208c0.133,0.717,0.211,1.452,0.211,2.208C61.998,56.626,56.626,61.998,50,61.998z')
 
-            nav(class='nav-top')
+            nav(class='nav-top' itemscope itemtype='http://schema.org/Organization')
                 .nav-wrapper.top
                     a.nav-icon.twitter(title="Twitter" tabindex="6")
                         svg(viewBox="0 0 512 512")
@@ -80,7 +106,7 @@ html(ng-app='app' lang='en')
                             '25.6 3.8 44.5 1.8 49.2 11.9 13 19.1 29.6 19.1 49.9 0 71.4-43.5 87.1-84.9 91.7 ' +
                             '6.7 5.8 12.8 17.1 12.8 34.4 0 24.9 0 44.9 0 51 0 4.9 3 10.7 12.4 8.9 73.8-24.6 ' +
                             '127-94.3 127-176.4C441.9 153.9 358.6 70.7 256 70.7z')
-                    a.nav-icon.codepen(title='CodePen' tabindex="9      ")
+                    a.nav-icon.codepen(title='CodePen' tabindex="9")
                         svg(viewbox='0 0 512 512')
                             path(d='M427 201.9c-0.6-4.2-2.9-8-6.4-10.3L264.2 87.3c-4.9-3.3-11.4-3.3-16.3 0L91.4' +
                             ' 191.6c-4 2.7-6.5 7.4-6.5 12.2v104.3c0 4.8 2.5 9.6 6.5 12.2l156.4 ' +
@@ -92,7 +118,7 @@ html(ng-app='app' lang='en')
                             '308.1l51.5-34.4 63.8 42.6V384.9zM256 290.8l-52-34.8 52-34.8 52' +
                             ' 34.8L256 290.8zM270.7 384.9V316.3l63.8-42.6 51.5 34.4L270.7 ' +
                             '384.9zM397.7 280.6l-36.8-24.6 36.8-24.6V280.6z')
-            nav(class='nav-bottom')
+            nav(class='nav-bottom' itemscope itemtype='http://schema.org/SiteNavigationElement')
                 .nav-wrapper.bot
                     a.nav-icon.home.active(ng-click="changeView('')" ng-keypress="($event.key==='Enter')?changeView(''):return" tabindex="1")
                         .hover-text home

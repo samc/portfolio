@@ -8,10 +8,10 @@ h1, h2 {
   transition: all ease-in .2s; }
 
 *::-moz-selection {
-  background: #57a3e4; }
+  background: #fb856f; }
 
 *::selection {
-  background: #57a3e4; }
+  background: #fb856f; }
 
 *:hover, *:active, *:focus {
   outline: none; }
@@ -206,7 +206,7 @@ nav.flat {
     transition: transform 1.4s cubic-bezier(0.03, 0.88, 0.33, 0.98) !important; }
   nav.flat.nav-bottom {
     left: -120vw;
-    bottom: 3.5vh !important; }
+    bottom: 1.5vh !important; }
     nav.flat.nav-bottom.active {
       transform: translate3d(122vw, 0, 0px) rotate(0deg) !important; }
     nav.flat.nav-bottom .nav-wrapper.bot {
@@ -216,7 +216,7 @@ nav.flat {
       padding-left: 2vw; }
   nav.flat.nav-top {
     right: -120vw;
-    top: 3.5vh !important; }
+    top: 1.5vh !important; }
     nav.flat.nav-top.active {
       transform: translate3d(-122vw, 0, 0px) rotate(0deg) !important; }
     nav.flat.nav-top .nav-wrapper.top {
@@ -905,7 +905,8 @@ input, textarea {
   left: 40vw;
   display: inline-block;
   overflow: hidden;
-  transition: all .2s; }
+  transition: all .2s;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(10%, black), color-stop(90%, black), to(transparent)); }
   .skill-container.active-f > #skill-wrap {
     margin-top: 0;
     margin-left: 0;
@@ -1043,10 +1044,19 @@ input, textarea {
     transform: translateX(-50%) translateY(-50%); }
 
   .view.about {
-    top: 49vh !important; }
+    top: 16vh !important;
+    bottom: 16vh !important;
+    left: 9vw !important;
+    width: 82vw !important;
+    transform: none !important;
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(black), color-stop(90%, black), to(transparent)); }
+    .view.about.fade-top {
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(10%, black), to(black)) !important; }
+    .view.about.fade-top-bottom {
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(10%, black), color-stop(90%, black), to(transparent)); }
 
   .view.skills {
-    top: 31vh !important; }
+    top: 34vh !important; }
 
   .view.contact {
     width: 80vw !important;
@@ -1082,25 +1092,34 @@ input, textarea {
       left: 12%;
       width: 76% !important; }
 
-  .header-container.about .header-content-body {
-    margin-left: 0 !important; }
-    .header-container.about .header-content-body .header.big {
-      font-size: 11vw !important; }
-    .header-container.about .header-content-body .header.body {
-      padding-top: .5vh !important;
-      font-size: 2.5vw !important; }
+  .header-container.about {
+    width: 110%;
+    height: 100%;
+    overflow-y: scroll;
+    position: absolute; }
+    .header-container.about .header-content-body {
+      margin-left: 0 !important;
+      margin-top: 2.2vh !important; }
+      .header-container.about .header-content-body .header-info-wrap {
+        margin-top: 0 !important; }
+      .header-container.about .header-content-body .header.big {
+        font-size: 11vw !important; }
+      .header-container.about .header-content-body .header.body {
+        padding-top: .5vh !important;
+        font-size: 3.4vw !important;
+        width: 82vw; }
 
   .header-container.skills .header.big {
     font-size: 11vw !important; }
   .header-container.skills .header.body {
-    font-size: 2.5vw !important; }
+    font-size: 2.8vw !important; }
 
   .header-container.contact .header.info {
     font-size: 3vw; }
 
   .skill-container {
     height: 35vh !important;
-    top: 68vh !important;
+    top: 72vh !important;
     width: 60vw !important; }
 
   #skill-wrap {
@@ -1156,10 +1175,7 @@ input, textarea {
           .work-wrapper .work-container .work-list .work-panel.cherry {
             margin: 0 !important; }
           .work-wrapper .work-container .work-list .work-panel .work-panel-slider {
-            width: 110vw !important;
-            right: -20vw;
-            border-top-width: 55vw;
-            border-right-width: 20vw; }
+            display: none !important; }
           .work-wrapper .work-container .work-list .work-panel .work-panel-mask {
             top: 0 !important; }
           .work-wrapper .work-container .work-list .work-panel .work-panel-cover {
@@ -1176,7 +1192,7 @@ input, textarea {
             .work-wrapper .work-container .work-list .work-panel .work-panel-header h2 {
               font-size: 4vw !important; }
           .work-wrapper .work-container .work-list .work-panel:hover .work-panel-cover {
-            transform: translateX(-110vw) !important; }
+            transform: none !important; }
           .work-wrapper .work-container .work-list .work-panel::-webkit-scrollbar {
             display: none; }
 

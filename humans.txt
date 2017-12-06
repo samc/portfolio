@@ -1,0 +1,19 @@
+/* TEAM */
+
+Your title: Samuel Craig.
+Site: email@samcraig.io.
+Twitter: @SamCraig.
+Location: St. Petersburg, Florida.
+
+
+
+/* THANKS */
+
+Name: Frank Ocean
+
+/* SITE */
+
+Last update: 2017/12/04
+Standards: HTML5, CSS3, ECMAScript 5.1
+Components: TimelineLite, Google Maps API, AngularJS, Angular-Route, Jade(Pug)
+Software: Node.js, Express, Webpack, Babel, PostCSS, Nodemailer, Lets Encrypt, Nginx

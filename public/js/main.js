@@ -152,7 +152,8 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/contact', {
             templateUrl: '../views/contact.html',
             resolve: transitionDelay
-        });
+        })
+        .otherwise({redirectTo : '/'});
 
     $locationProvider.html5Mode(true);
 })
@@ -237,7 +238,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             return document.getElementById('view-container')
         }
         $scope.hasChangedView = false;
-        $scope.referrer = '';
         $scope.mobileWidth = 768;
         $scope.isDark = function () {
             return (localStorage.getItem('color') === 'dark')
@@ -378,60 +378,45 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
             $scope.hasChangedView = true;
 
-            console.log(route);
-
             // only change view if current view and selected view are different
             if (!($scope.currentView === '/' + route)) {
-
-                console.log('success : ' + route);
-
-                //------------------------------
-                // Transition Animations
-                //------------------------------
-
-                // change view specific animations
-                document.getElementById('light-mode').classList.remove('active');
-                document.getElementById('background').classList.add('transition');
-
-                var navBanners = document.getElementsByTagName('NAV'),
-                    viewChildren = document.getElementById('view-container').childNodes;
-                //transitionSliders = document.querySelector('.transition-sliders');
-
-                for (var c = 0; c < viewChildren.length; c++) {
-                    viewChildren[c].classList.remove('active');
-                }
-
-                for (var b = 0; b < navBanners.length; b++) {
-                    navBanners[b].classList.remove('active');
-                }
-
-                // // show sliders before animation start
-                // transitionSliders.style.visibility = 'visible';
-                // // hide sliders after animation is complete
-                // $timeout(function () {
-                //     document.querySelector('.transition-sliders').style.visibility = 'hidden';
-                // }, 2600); // last slider leaves frame after 2.6s (1.9s duration + .7s delay)
-                // transitionSliders.classList.toggle('active');
-
-                // set uri reference for view specific animations
-                $scope.referrer = $location.path();
-
                 // redirect to new url to initiate view change
                 $location.path('/' + route);
-                // set the current route for reference for view comparison check
-                $scope.currentView = '/' + route;
-                // exit animations
-                var viewChildrenNew = document.getElementById('view-container').childNodes;
-
-                for (var n = 0; n < viewChildrenNew.length; n++) {
-                    viewChildrenNew[n].classList.add('exit');
-                }
             }
         }
 
+        $scope.$on('$routeChangeStart', function(){
+
+            // set the current route for reference for view comparison check
+            $scope.currentView = $location.path();
+
+            //------------------------------
+            // Transition Animations
+            //------------------------------
+
+            document.getElementById('light-mode').classList.remove('active');
+            document.getElementById('background').classList.add('transition');
+
+            var navBanners = document.getElementsByTagName('NAV'),
+                viewChildren = document.getElementById('view-container').childNodes;
+
+            for (var c = 0; c < viewChildren.length; c++) {
+                viewChildren[c].classList.remove('active');
+            }
+
+            for (var b = 0; b < navBanners.length; b++) {
+                navBanners[b].classList.remove('active');
+            }
+
+            var viewChildrenNew = document.getElementById('view-container').childNodes;
+
+            for (var n = 0; n < viewChildrenNew.length; n++) {
+                viewChildrenNew[n].classList.add('exit');
+            }
+        })
+
         // light mode color swapping
 
-        // nav elements are static, no need to iterate and adjust for length
         var navIcons = document.querySelectorAll('.nav-icon'),
             navBanners = document.querySelectorAll('nav');
 
@@ -469,6 +454,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 currentViewEl.childNodes[v].classList.toggle('dark');
             }
         }
+        // toggle local storage value 'color' when necessary
         $scope.toggleLocalStorage = function() {
             if (localStorage.getItem('color') === null) {
                 localStorage.setItem('color', 'dark');
@@ -955,9 +941,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
     $scope.$on('$viewContentLoaded', function () {
 
-        console.log('viewContentLoaded')
-
-
         // Remove :focus from element to prevent title from displaying
         // if tab was used to navigate
         document.activeElement.blur();
@@ -1217,25 +1200,24 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }, 3000)
             }
 
-            // work route handler
-            if($location.path() === '/work'){
+            // work & about overflow styling
+            if($location.path() === '/work' || $location.path() === '/about'){
 
-                var workContainer = document.querySelector('.work-container'),
-                    workWrapper = workContainer.parentNode;
+                var container = document.querySelector('.work-container') || document.querySelector('.header-container.about'),
+                    wrapper = container.parentNode;
 
-                workContainer.addEventListener('scroll', function(){
+                container.addEventListener('scroll', function(){
                     if (window.innerWidth <= $scope.mobileWidth){
-                        console.log(workContainer.scrollTop, workContainer.clientHeight, workContainer.clientTop, workContainer.offsetHeight, workContainer.scrollHeight);
-                        if (workContainer.scrollTop !== 0){
-                            if(workContainer.scrollHeight - workContainer.offsetHeight === workContainer.scrollTop){
-                                workWrapper.classList.add('fade-top');
+                        if (container.scrollTop !== 0){
+                            if(container.scrollHeight - container.offsetHeight === container.scrollTop){
+                                wrapper.classList.add('fade-top');
                             }
                             else {
-                                workWrapper.classList.add('fade-top-bottom');
-                                workWrapper.classList.remove('fade-top');
+                                wrapper.classList.add('fade-top-bottom');
+                                wrapper.classList.remove('fade-top');
                             }
                         }
-                        else workWrapper.classList.remove('fade-top', 'fade-top-bottom');
+                        else wrapper.classList.remove('fade-top', 'fade-top-bottom');
                     }
                 })
 
@@ -1482,7 +1464,6 @@ function tween_stop(o) {
 }
 
 function tween_setProperty(o, x, y) {
-    console.log(x, y)
     o.style.cssText += ';transform:translate3d(' + x + 'vw,' + y +'vh,0);' ;
 }
 

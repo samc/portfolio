@@ -13,11 +13,11 @@ h1, h2 {
 }
 
 *::-moz-selection {
-  background: #57a3e4;
+  background: #fb856f;
 }
 
 *::selection {
-  background: #57a3e4;
+  background: #fb856f;
 }
 
 *:hover, *:active, *:focus {
@@ -305,8 +305,7 @@ nav.flat {
   }
   &.nav-bottom {
     left: $nav-contact-start-x;
-    bottom: 3.5vh !important;
-
+    bottom: 1.5vh !important;
     &.active {
       transform: translate3d(#{$nav-contact-end-x - $nav-contact-start-x}, 0, 0px) rotate(0deg) !important;
     }
@@ -319,7 +318,7 @@ nav.flat {
   }
   &.nav-top {
     right: $nav-contact-start-x;
-    top: 3.5vh !important;
+    top: 1.5vh !important;
     &.active {
       transform: translate3d(#{$nav-contact-start-x - $nav-contact-end-x}, 0, 0px) rotate(0deg) !important;
     }
@@ -1229,6 +1228,7 @@ input, textarea {
   display: inline-block;
   overflow: hidden;
   transition: all .2s;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
   &.active-f > #skill-wrap {
     margin-top: 0;
     margin-left: 0;
@@ -1341,10 +1341,21 @@ input, textarea {
     transform: translateX(-50%) translateY(-50%);
   }
   .view.about {
-    top: 49vh !important;
+    top: 16vh !important;
+    bottom: 16vh !important;
+    left: 9vw !important;
+    width: 82vw !important;
+    transform: none !important;
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    &.fade-top {
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), to(rgba(0,0,0,1))) !important;
+    }
+    &.fade-top-bottom {
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    }
   }
   .view.skills {
-    top: 31vh !important;
+    top: 34vh !important;
   }
   .view.contact {
     width: 80vw !important;
@@ -1389,15 +1400,24 @@ input, textarea {
     }
   }
   .header-container.about {
+    width: 110%;
+    height: 100%;
+    overflow-y: scroll;
+    position: absolute;
     .header-content-body {
       margin-left: 0 !important;
+      margin-top: 2.2vh !important;
+      .header-info-wrap {
+        margin-top: 0 !important;
+      }
       .header {
         &.big {
           font-size: 11vw !important;
         }
         &.body {
           padding-top: .5vh !important;
-          font-size: 2.5vw !important;
+          font-size: 3.4vw !important;
+          width: 82vw;
         }
       }
     }
@@ -1408,7 +1428,7 @@ input, textarea {
         font-size: 11vw !important;
       }
       &.body {
-        font-size: 2.5vw !important;
+        font-size: 2.8vw !important;
       }
     }
   }
@@ -1419,7 +1439,7 @@ input, textarea {
   }
   .skill-container {
     height: 35vh !important;
-    top: 68vh !important;
+    top: 72vh !important;
     width: 60vw !important;
   }
   #skill-wrap {
@@ -1481,10 +1501,7 @@ input, textarea {
             margin: 0 !important;
           }
           .work-panel-slider {
-            width: 110vw !important;
-            right: -20vw;
-            border-top-width: 55vw;
-            border-right-width: 20vw;
+            display: none !important;
           }
           .work-panel-mask {
             top: 0 !important;
@@ -1508,7 +1525,7 @@ input, textarea {
           }
           &:hover {
             .work-panel-cover {
-              transform: translateX(-110vw) !important;
+              transform: none !important;
             }
           }
           &::-webkit-scrollbar {
