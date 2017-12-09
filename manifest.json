@@ -1,0 +1,13 @@
+{
+  "name": "Sam Craig Portfolio",
+  "short_name": "Portfolio",
+  "start_url": "index.html",
+  "icons": [{
+    "src": "images/mobile-icon.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "background_color": "#e3e3e5",
+  "display": "standalone",
+  "theme_color": "#57a3e4"
+}

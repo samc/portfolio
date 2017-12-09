@@ -1,14 +1,6 @@
 require('./triangles');
 require('../css/style.css');
-//
-// require('../images/logoMarkerDark.svg');
-// require('../images/logoMarkerLight.svg');
-//
-// require('../images/twitter.png');
-// require('../images/favicon.png');
-// require('../images/work/timer.png');
-// require('../images/work/libra.png');
-// require('../images/work/cherry.png');
+require('../images/favicon.png');
 
 // console art / info
 var logoText = '\n' +

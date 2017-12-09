@@ -1,25 +1,37 @@
 # Sam Craig's Personal Portfolio
 
-Hey there, thanks for checking out my portfolio!
+This is my first attempt at putting together an online portfolio - so if you have any suggestions or comments on the project or anything really, you can contact me at **contact@samcraig.io** or **@samcraigdev** on Twitter. Thanks for checking it out!
 
 ## Analysis and Preparation
 
-Before starting the project, I knew I wanted my portfolio to be unique.
+I knew going into the project that I wanted it to consist of something out of the ordinary. The overall **slanted** design approach really didn't surface until after I had sketched out the logo. Almost immediately after I had finished the final logo design, everything fell into place. The slanted nav bars and triangle tessellation used for the background helped to bring consistency to the overall design.
 
 ## Fixing Major Issues
 
-Oh boy, I ran into more than my fair share of bugs / quirks throughout the development process of this project - most notably of those being performance. The downside of making a quite interactive and dynamic site was the performance and load necessary to pull it off. With some long nights of scouring documentation and the help of the friendly people over at [/r/webdev](https://www.reddit.com/r/webdev/comments/7g84co/my_first_portfolio_hows_it_look/), I managed to vastly improve both the load time and overall performance of the portfolio.
+Oh boy, I ran into more than my fair share of bugs / quirks throughout the development process of this project - most notably of those being performance. The downsides of making a quite interactive and dynamic site were the power and load necessary to pull it off. With some long nights of scouring documentation and the help of the friendly people over at [/r/webdev](https://www.reddit.com/r/webdev/comments/7g84co/my_first_portfolio_hows_it_look/), I managed to vastly improve both the load time and overall performance of the portfolio.
 
 ### Animation
 
 - Rewriting @keyframe animations to translation based alternatives
 - Minimizing unnecessary transition animations
+- Improving mobile performance by cutting back on taxing animations ( background tesselation / header reveal )
 
 ### Load
 
 - Designing my own SVG icons and doing away with FontAwesome alternatives
 - Introducing both compressed and gzipped asset delivery with webpack
 - Implementing async view rendering capabilities with Angular's ngRoute module
+
+## Other things I learned along the way
+
+- Improved upon my Illustrator skillset
+- Hosting and DNS setup from scratch on Digital Ocean VPS using Nginx
+- Free SSL implementation with LetsEncrypt
+- Better understanding of SEO
+
+## Conclusion
+
+Before starting this project, my overall front-end skillet was lacking - as I generally put more emphasis on back-end oriented projects. The process of designing and building my own portfolio really pushed me to step out of my comfort zone and adopt a new approach to front-end development. Over the course of the project, I learned a ton of invaluable lessons and
 
 ## Color Scheme
 

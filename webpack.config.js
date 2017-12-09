@@ -28,13 +28,13 @@ module.exports = {
                     outputPath: 'fonts/'
                 }
             },
-            // {
-            //     test: /\.(gif|png|jpe?g|svg)$/i,
-            //     loaders: [
-            //         'file-loader?hash=sha512&digest=hex&name=/images/[name].small.[ext]',
-            //         'image-webpack-loader?{optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}'
-            //     ]
-            // },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                loaders: [
+                    'file-loader?hash=sha512&digest=hex&name=/images/[name].small.[ext]',
+                    'image-webpack-loader?{optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}'
+                ]
+            },
             {
                 test: /\.css$/,
                 // use: ['css-loader', 'postcss-loader']
