@@ -2,24 +2,21 @@
 
 Hey there, thanks for checking out my portfolio!
 
-## Color Schemes
+## Color Scheme
 
-### Global Accents
+### Accents
 
 - ![#57a3e4](https://placehold.it/15/57a3e4/000000?text=+) `#57a3e4`
 - ![#2D2E83](https://placehold.it/15/2D2E83/000000?text=+) `#2D2E83`
 
-### Day
-
-- ![#e3e3e5](https://placehold.it/15/e3e3e5/000000?text=+) `#e3e3e5`
-- ![#66697E](https://placehold.it/15/66697E/000000?text=+) `#66697E`
-- ![#15151e](https://placehold.it/15/15151e/000000?text=+) `#4c4f65`
-
-### Night
+### Global
 
 - ![#e3e3e5](https://placehold.it/15/e3e3e5/000000?text=+) `#e3e3e5`
 - ![#707493](https://placehold.it/15/707493/000000?text=+) `#707493`
+- ![#66697E](https://placehold.it/15/66697E/000000?text=+) `#66697E`
+- ![#4c4f65](https://placehold.it/15/4c4f65/000000?text=+) `#4c4f65`
 - ![#15151e](https://placehold.it/15/15151e/000000?text=+) `#15151e`
+
 
 
 ## Built With
