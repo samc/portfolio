@@ -20,7 +20,7 @@ module.exports = {
 
             },
             {
-                test: /\.(woff(2)?|ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                test: /\.(woff(2)?|ttf|eot|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: "url-loader",
                 query: {
                     limit: '10000',
