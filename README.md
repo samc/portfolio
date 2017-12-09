@@ -31,7 +31,7 @@ Oh boy, I ran into more than my fair share of bugs / quirks throughout the devel
 
 ## Conclusion
 
-Before starting this project, my overall front-end skillet was lacking - as I generally put more emphasis on back-end oriented projects. The process of designing and building my own portfolio really pushed me to step out of my comfort zone and adopt a new approach to front-end development. Over the course of the project, I learned a ton of invaluable lessons and
+Before starting this project, my overall front-end skillet was lacking - as I generally put more emphasis on back-end oriented projects. The process of designing and building my own portfolio really pushed me to step out of my comfort zone and adopt a new approach to front-end development. Over the course of the project, I learned a ton of invaluable lessons that have improved my approach both to development and design.
 
 ## Color Scheme
 
