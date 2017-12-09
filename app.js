@@ -12,12 +12,27 @@ app.set('views', path.join(__dirname, 'public/views'));
 app.set('view engine', 'jade');
 
 
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'public', 'dist', 'images', 'favicon.small.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/public')));
+
+app.use('*.js', function(req, res, next) {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/javascript');
+    next();
+});
+
+app.use('*.css', function(req, res, next) {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/css');
+    next();
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 var nodemailer = require('nodemailer');
 
@@ -36,43 +51,7 @@ var transporter = nodemailer.createTransport({
 
 app.post('/contact', function (req, res) {
 
-    // extract FormData from POST
-    //
-    //var bodyStr = JSON.stringify(req.body);
-    //
-    // var buildingKey = false,
-    //     totalQ = 0,
-    //     finalKey = '',
-    //     finalVar = '',
-    //     finalObj = {},
-    //     re = /\\r\\n\\r\\n\s*(.*?)\\r\\n/
-    //
-    // for (var i = 0; i < bodyStr.length; i++) {
-    //     if (bodyStr[i] === '"') {
-    //         totalQ++;
-    //         if (totalQ > 3){ // 3 arbitrary quotation marks precede keys
-    //             buildingKey = (!buildingKey);
-    //             if (!buildingKey) {
-    //                 finalKey = finalKey.slice(0, -1);
-    //                 console.log(finalKey);
-    //             } else if (totalQ > 4){ // delay variable declaration until after first key extraction
-    //                 finalVar = re.exec(finalVar);
-    //                 finalObj[finalKey] = '' + finalVar[1];
-    //                 finalKey = '';
-    //                 finalVar = '';
-    //             }
-    //         }
-    //     }
-    //     else if (buildingKey) {
-    //         finalKey += bodyStr[i];
-    //     }
-    //     else if (totalQ > 3) finalVar += bodyStr[i];
-    // }
-    //
-    // var name = finalObj.name,
-    //     email = finalObj.email,
-    //     message = finalObj.message;
-
+    // json response from contact form submission
     var data = req.body;
 
     // Prevent key tampering from messing with email handler
@@ -89,7 +68,7 @@ app.post('/contact', function (req, res) {
                 res.send('Hmm, something went wrong..');
                 return console.log(error);
             } else {
-                res.send('Email sent!');
+                res.send('Email sent.');
             }
         });
     } else {
@@ -98,9 +77,10 @@ app.post('/contact', function (req, res) {
 
 });
 
+// when a user requests /*, send them to the index
+// SPA view routing handled by angular-route
 app.use('/', function (req, res) {
     res.render('index');
 });
-
 
 module.exports = app;

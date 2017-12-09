@@ -1,9 +1,6 @@
 doctype html
 html(ng-app='app' lang='en')
     head(itemscope itemtype='http://schema.org/Website')
-
-        script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")
-
         meta(charset='UTF-8')
         meta(http-equiv='X-UA-Compatible' content='IE-edge,chrome=1')
         title Sam Craig - Full Stack Web Developer
@@ -13,6 +10,9 @@ html(ng-app='app' lang='en')
         meta(name='msapplication-tap-highlight' content='no')
         link(rel='canonical' href='https://samcraig.io')
         link(type='text/plain' rel='author' href='humans.txt')
+
+        meta(name='theme-color' content='#4c4f65')
+        link(rel='icon' sizes="192x192" href='https://samcraig.io/dist/images/favicon.small.png')
 
         meta(itemprop='name' content='Sam Craig - Full Stack Web Developer')
         meta(itemprop='description' content="Sam Craig's personal portfolio website")
@@ -26,7 +26,7 @@ html(ng-app='app' lang='en')
         meta(property='og:type' content='website')
         meta(property='og:title' content='Sam Craig - Full Stack Web Developer')
         meta(property='og:description' content="Sam Craig's personal portfolio website")
-        meta(property='og:image' content='https://samcraig.io/public/images/favicon.png')
+        meta(property='og:image' content='https://samcraig.io/dist/images/twitter.small.png')
 
         meta(name='twitter:card' content='summary_large_image')
         meta(name='twitter:site' content='@SamCraig')
@@ -34,10 +34,9 @@ html(ng-app='app' lang='en')
         meta(name='twitter:title' content='Sam Craig - Full Stack Web Developer')
         meta(name='twitter:description' content="Sam Craig's personal portfolio website")
         meta(name='twitter:url' content="https://samcraig.io")
-        meta(name='twitter:image' content='https://samcraig.io/public/images/favicon.png')
+        meta(name='twitter:image' content='https://samcraig.io/dist/images/twitter.small.png')
 
         link(rel='stylesheet', href='dist/style.css')
-        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
 
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.js')
@@ -75,8 +74,8 @@ html(ng-app='app' lang='en')
 
             nav(class='nav-top' itemscope itemtype='http://schema.org/Organization')
                 .nav-wrapper.top
-                    a.nav-icon.twitter(title="Twitter" tabindex="6")
-                        svg(viewBox="0 0 512 512")
+                    a.nav-icon.twitter(title="Twitter" tabindex="6" href='https://twitter.com/SamCraigDev')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
                             path(d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 " +
                             "13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 " +
                             "-11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9" +
@@ -85,8 +84,8 @@ html(ng-app='app' lang='en')
                             " -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4" +
                             " 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0" +
                             " 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z")
-                    a.nav-icon.linkedin(title='LinkedIn' tabindex="7")
-                        svg(viewbox='0 0 512 512')
+                    a.nav-icon.linkedin(title='LinkedIn' tabindex="7" href='https://www.linkedin.com/in/samcraigdev/')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
                             path(d='M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 ' +
                             '0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 ' +
                             '107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 ' +
@@ -94,8 +93,8 @@ html(ng-app='app' lang='en')
                             ' 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 ' +
                             '0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3' +
                             ' 30.9v-25.2H273.8z')
-                    a.nav-icon.github(title='Github' tabindex="8")
-                        svg(viewbox='0 0 512 512')
+                    a.nav-icon.github(title='Github' tabindex="8" href='https://github.com/samc21')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
                             path(d='M256 70.7c-102.6 0-185.9 83.2-185.9 185.9 0 82.1 53.3 ' +
                             '151.8 127.1 176.4 9.3 1.7 12.3-4 12.3-8.9V389.4c-51.7 ' +
                             '11.3-62.5-21.9-62.5-21.9 -8.4-21.5-20.6-27.2-20.6-27.2 -16.9-11.5 ' +
@@ -106,8 +105,8 @@ html(ng-app='app' lang='en')
                             '25.6 3.8 44.5 1.8 49.2 11.9 13 19.1 29.6 19.1 49.9 0 71.4-43.5 87.1-84.9 91.7 ' +
                             '6.7 5.8 12.8 17.1 12.8 34.4 0 24.9 0 44.9 0 51 0 4.9 3 10.7 12.4 8.9 73.8-24.6 ' +
                             '127-94.3 127-176.4C441.9 153.9 358.6 70.7 256 70.7z')
-                    a.nav-icon.codepen(title='CodePen' tabindex="9")
-                        svg(viewbox='0 0 512 512')
+                    a.nav-icon.codepen(title='CodePen' tabindex="9" href='https://codepen.io/samcraig/#')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
                             path(d='M427 201.9c-0.6-4.2-2.9-8-6.4-10.3L264.2 87.3c-4.9-3.3-11.4-3.3-16.3 0L91.4' +
                             ' 191.6c-4 2.7-6.5 7.4-6.5 12.2v104.3c0 4.8 2.5 9.6 6.5 12.2l156.4 ' +
                             '104.3c4.9 3.3 11.4 3.3 16.3 0L420.6 320.4c4-2.6 6.6-7.4 ' +
@@ -122,24 +121,37 @@ html(ng-app='app' lang='en')
                 .nav-wrapper.bot
                     a.nav-icon.home.active(ng-click="changeView('')" ng-keypress="($event.key==='Enter')?changeView(''):return" tabindex="1")
                         .hover-text home
-                        i.fa.fa-home(aria-hidden='true')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
+                            polygon(xmlns="http://www.w3.org/2000/svg" points="436.1 167.73 359.66 131.95 359.66 371.94 152.24 371.94 152.24 189.36 126.61 201.62 126.61 396.62 385.28 396.62 385.28 174.34 436.1 198.12")
+                            polygon(xmlns="http://www.w3.org/2000/svg" points="332.95 119.44 332.95 149.84 256 113.82 75.792 198.12 75.792 167.73 256 83.427")
                     a.nav-icon.about(ng-click="changeView('about')" ng-keypress="($event.key==='Enter')?changeView('about'):return" tabindex="2")
                         .hover-text about
-                        i.fa.fa-info(aria-hidden='true')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
+                            polygon(xmlns="http://www.w3.org/2000/svg" points="324.84 248.07 187.16 248.07 96.275 310.84 96.275 413.7 121.13 413.7 121.13 325.57 196.28 273.07 315.72 273.07 390.87 325.57 390.87 413.7 415.72 413.7 415.72 310.84")
+                            polygon(xmlns="http://www.w3.org/2000/svg" points="293.05 74.037 319.71 147.4 302.11 203.4 237.79 203.4 245.25 227.16 322.86 227.16 348.38 145.96 321.72 74.037")
+                            polygon(xmlns="http://www.w3.org/2000/svg" points="273.04 97.797 264.41 74.037 189.28 74.037 163.62 145.96 189.14 227.16 217.42 227.16 192.29 147.4 209.99 97.797")
                     a.nav-icon.skills(ng-click="changeView('skills')" ng-keypress="($event.key==='Enter')?changeView('skills'):return" tabindex="3")
                         .hover-text skills
-                        i.fa.fa-code(aria-hidden='true')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
+                            rect(transform="matrix(.234 -.9722 .9722 .234 -52.79 445)" x="80.687" y="240.69" width="350.62" height="30.625")
+                            polygon(points="117.31 256 200.1 173.22 178.44 151.56 74.143 255.86 74.143 256.14 178.44 360.44 200.1 338.78")
+                            polygon(points="333.56 151.56 311.9 173.22 394.69 256 311.9 338.78 333.56 360.44 437.86 256.14 437.86 255.86")
                     a.nav-icon.work(ng-click="changeView('work')" ng-keypress="($event.key==='Enter')?changeView('work'):return" tabindex="4")
                         .hover-text work
-                        i.fa.fa-pencil-square-o(aria-hidden='true')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
+                            path(d="m256 158.75l-46.25-47.25h-144.38v285.12h381.25v-237.88h-190.62zm165.31 213.19h-330.62v-235.38h103.74l46.25 47.25 180.63-0.063v188.19z")
+                            polygon(points="269.12 142.5 446.62 142.5 446.62 118.88 246 118.88")
                     a.nav-icon.contact(ng-click="changeView('contact')" ng-keypress="($event.key==='Enter')?changeView('contact'):return" tabindex="5")
                         .hover-text contact
-                        i.fa.fa-envelope-o(aria-hidden='true')
+                        svg(enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg")
+                            polyline(points="90.688 136.56 90.688 371.94 421.31 371.94 421 236.01 446.62 223.75 446.62 396.62 65.375 396.62 65.375 111.5 446.62 111.5 446.62 184 256 272.5 127.04 212.57 127.01 181.93 256 241.88 421.31 165.25 421.31 136.56")
             .transition-sliders
                 .t-slide.one
                 .t-slide.two
                 .t-slide.three
+            #mobile-shake
             #view-container(ng-view).ng-cloak
             #notification
             #background.container
                 #output.container
+            script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")

@@ -1,7 +1,14 @@
 require('./triangles');
 require('../css/style.css');
-require('../images/logoMarkerDark.svg');
-require('../images/logoMarkerLight.svg');
+//
+// require('../images/logoMarkerDark.svg');
+// require('../images/logoMarkerLight.svg');
+//
+// require('../images/twitter.png');
+// require('../images/favicon.png');
+// require('../images/work/timer.png');
+// require('../images/work/libra.png');
+// require('../images/work/cherry.png');
 
 // console art / info
 var logoText = '\n' +
@@ -174,10 +181,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //------------------------------
         // Home Page Animation Sequence
         //------------------------------
-        var outline = document.querySelector('.site-loader'), //        || loading border animation (left & bottom)
-            topBorder = outline.querySelector('.line.top'),
-            rightBorder = outline.querySelector('.line.right'),
-            slider = document.querySelector('.transition-sliders');//   || slider animation following border collapse
+
+        var outline = document.querySelector('.site-loader'), //          || loading border (left & bottom)
+            topBorder = outline.querySelector('.line.top'),//             || loading border (top)
+            rightBorder = outline.querySelector('.line.right'),//         || loading border (right)
+            slider = document.querySelector('.transition-sliders'),//     || opening transition sliders
+            icons = document.querySelectorAll('.nav-icon');//             || nav icons
 
         var tl = new TimelineLite({paused: true});
 
@@ -186,10 +195,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 outline.classList.add('active')
             })
             // start to expand width and height of bottom / left border
-            .to(outline, 0.8, {width: '100%', height: '100%', ease: Quad.easeIn})
-            //.to(_outline, 0.8, {width: '110%', height: '110%', ease: Expo.easeOut})
-            .to(topBorder, 0.8, {width: '102%', ease: Expo.easeOut})
-            .to(rightBorder, 0.8, {height: '102%', ease: Expo.easeOut}, '-=.8')
+            .to(outline, 0.6, {width: '100%', height: '100%', ease: Quad.easeIn})
+            .to(topBorder, 0.6, {width: '102%', ease: Expo.easeOut})
+            .to(rightBorder, 0.6, {height: '102%', ease: Expo.easeOut}, '-=.6')
             .add(function () {
                 outline.style.borderTop = '8px solid transparent';
                 outline.style.borderRight = '8px solid transparent'
@@ -217,15 +225,42 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.getElementById('background').classList.add('active');
                 document.querySelector('.nav-bottom').classList.add('transition', 'active');
                 document.querySelector('.nav-top').classList.add('transition', 'active');
-
             }, 'shutterStart+=1.8')
             // reveal nav icons
-            .to(document.querySelectorAll('.nav-icon'), 0, {opacity: 1}, 'shutterStart+=2.8')
+            .add(function () {
+                var iconList = Array.from(icons);
+                function showRandomIcon(){
+                    setTimeout(function(){
+                        var index = Math.floor(Math.random() * (iconList.length - 1));
+                        iconList[index].style.opacity = 1;
+                        iconList.splice(index, 1);
+                        if (iconList.length > 0) showRandomIcon();
+                    }, 80);
+                }
+                showRandomIcon();
+
+            }, 'shutterStart+=2.8')
+            // change nav icon transition value after initial animation
+            // total time for all icons to be revealed : timeout delay * icons.length = 720ms
+            // delay from reveal set at : 2.8s + .72s = 4.52s
+            .add(function () {
+                for(var a = 0; a < icons.length; a++){
+                    icons[a].classList.add('transition');
+                }
+            }, 'shutterStart+=4.52')
             // hide transition sliders
             .to(slider, 1, {visibility: 'hidden'}, 'shutterStart+=3.0')
             // reveal light mode button
             .add(function () {
                 document.getElementById('light-mode').classList.add('active');
+            }, 'shutterStart+=3.1')
+            // display mobile shake light mode reminder if being viewed from a phone
+            .add(function () {
+                    if ($location.path() === '/skills'){
+                        $scope.createNotification('Scroll to rotate skills.');
+                    } else if ($location.path() === '/' && window.innerWidth <= $scope.mobileWidth){
+                        $scope.createNotification('Shake device to toggle night mode.')
+                    }
             }, 'shutterStart+=3.1')
         tl.play();
 
@@ -238,6 +273,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             return document.getElementById('view-container')
         }
         $scope.hasChangedView = false;
+        $scope.hasViewedSkills = false;
         $scope.mobileWidth = 768;
         $scope.isDark = function () {
             return (localStorage.getItem('color') === 'dark')
@@ -385,6 +421,46 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
 
+        //------------------------------------
+        // Toggle Light Mode on Device Shake
+        //------------------------------------
+
+        if (window.DeviceMotionEvent !== 'undefined') {
+            // Shake sensitivity (a lower number is more)
+            var sensitivity = 25,
+                active = false
+
+            // Position variables
+            var x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+
+            // Listen to motion events and update the position
+            window.addEventListener('devicemotion', function (e) {
+                x1 = e.accelerationIncludingGravity.x;
+                y1 = e.accelerationIncludingGravity.y;
+                z1 = e.accelerationIncludingGravity.z;
+            }, false);
+
+            // Periodically check the position and fire
+            // if the change is greater than the sensitivity
+            setInterval(function () {
+                var change = Math.abs(x1 - x2 + y1 - y2 + z1 - z2);
+
+                if (change > sensitivity && !active) {
+                    $scope.toggleLocalStorage();
+                    $scope.toggleColors();
+                    active = true;
+                    setTimeout(function () {
+                        active = false;
+                    }, 2000)
+                }
+
+                // Update new position
+                x2 = x1;
+                y2 = y1;
+                z2 = z1;
+            }, 150);
+        }
+
         $scope.$on('$routeChangeStart', function(){
 
             // set the current route for reference for view comparison check
@@ -463,50 +539,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
 
-        // var shakeCounter = 0,
-        //     prevMouseX = 0,
-        //     leftPeak = 0,
-        //     rightPeak = 0,
-        //     rightPeakReached = false,
-        //     shakeDistance = 500,
-        //     shakesToTrigger = 7;
-        //
-        // window.onmousemove = function (e) {
-        //     e = e || window.event;
-        //     var mouseX = e.clientX;
-        //
-        //     // mouse is moving right
-        //     if (mouseX > prevMouseX) {
-        //         rightPeak = mouseX;
-        //         if (rightPeak - leftPeak >= shakeDistance && !rightPeakReached) {
-        //             rightPeakReached = true;
-        //             shakeCounter++;
-        //         }
-        //         // mouse is moving left
-        //     } else {
-        //         leftPeak = mouseX;
-        //         if (rightPeak - leftPeak >= shakeDistance && rightPeakReached) {
-        //             rightPeakReached = false;
-        //             shakeCounter++;
-        //         }
-        //     }
-        //
-        //     // trigger light mode change
-        //     if (shakeCounter >= shakesToTrigger) {
-        //         shakeCounter = 0;
-        //         document.getElementById('light-mode').dispatchEvent(new Event('click'));
-        //     }
-        //
-        //     prevMouseX = mouseX
-        //
-        //     // if the user has not moved their mouse within the last 100ms, 'shakeCounter' is reset
-        //     clearTimeout(this.shakeDecayDelay);
-        //
-        //     this.shakeDecayDelay = setTimeout(function () {
-        //         shakeCounter = 0;
-        //     }, 100);
-        // };
-
         var background = document.getElementById('background'),
             toggleBackgroundColorEvent = new Event('togglecolor');
 
@@ -539,9 +571,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             var notification = document.getElementById('notification');
 
             notification.innerHTML = message;
+            var notificationWidth = parseFloat(window.getComputedStyle(notification, null).getPropertyValue('width'));
+            notification.style.left = '-' + notificationWidth + 'px';
+            console.log(notification.style.left, '-' + (notificationWidth + 20) + 'px');
+            notification.style.transform = 'translateX(' + (notificationWidth + 20) +'px)';
             notification.classList.add('active');
 
             $timeout(function () {
+                notification.style.transform = 'none';
                 notification.classList.remove('active');
             }, 5000);
         }
@@ -568,40 +605,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         adjustNavBars();
         window.addEventListener('resize', adjustNavBars);
 
-        if (window.DeviceMotionEvent !== 'undefined') {
-            // Shake sensitivity (a lower number is more)
-            var sensitivity = 25,
-                active = false
-
-            // Position variables
-            var x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
-
-            // Listen to motion events and update the position
-            window.addEventListener('devicemotion', function (e) {
-                x1 = e.accelerationIncludingGravity.x;
-                y1 = e.accelerationIncludingGravity.y;
-                z1 = e.accelerationIncludingGravity.z;
-            }, false);
-
-            // Periodically check the position and fire
-            // if the change is greater than the sensitivity
-            setInterval(function () {
-                var change = Math.abs(x1 - x2 + y1 - y2 + z1 - z2);
-
-                if (change > sensitivity && !active) {
-                    document.getElementById('light-mode').dispatchEvent(new MouseEvent('click'));
-                    active = true;
-                    setTimeout(function () {
-                        active = false;
-                    }, 2000)
-                }
-
-                // Update new position
-                x2 = x1;
-                y2 = y1;
-                z2 = z1;
-            }, 150);
-        }
     }, 0)
 
     $scope.updateView = function () {
@@ -932,7 +935,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
     // google maps marker will reflect respective light mode when updated
     $scope.mapMarker = function () {
-        return ($scope.isDark()) ? 'images/logoMarkerDark.svg' : 'images/logoMarkerLight.svg';
+        return ($scope.isDark()) ? 'dist/images/logoMarkerDark.small.svg' : 'dist/images/logoMarkerLight.small.svg';
     };
 
 
@@ -1002,10 +1005,15 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // skills route handler
             if ($location.path() === '/skills') {
 
+                if (!$scope.hasViewedSkills && $scope.hasChangedView) $scope.createNotification('Scroll to rotate skills.');
+                $scope.hasViewedSkills = true;
+
+                var skillWrap = document.getElementById('skill-wrap');
+
                 (function () {
                     var styleTop = (window.innerWidth <= 768) ? '-42vh' : '-40vh';
 
-                    document.getElementById('skill-wrap').style.cssText = 'top:' + styleTop + ' !important;left:0vw !important';
+                    skillWrap.style.cssText = 'top:' + styleTop + ' !important;left:0vw !important';
                 })();
 
                 $scope.activeSkills = [];
@@ -1063,8 +1071,22 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     document.getElementById('skill-wrap').childNodes[17].classList.add('active');
                 }, 2000)
 
-                const topStart = -40;
-                const leftStart = 0;
+                const topStart = -40,
+                      leftStart = 0;
+
+                var touchStart,
+                    touchEnd;
+
+
+
+                skillWrap.addEventListener('touchstart', function(e){
+                    touchStart = e.changedTouches;
+                }, false);
+
+                skillWrap.addEventListener('touchend', function(e){
+                    touchEnd = e.changedTouches;
+                    console.log(touchStart, touchEnd);
+                }, false);
 
                 // check if user is still in the Stone Age
                 var wheelEvent = isEventSupported('wheel') ? 'wheel' : 'mousewheel';
@@ -1311,6 +1333,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
 
                     if (dataSuccess) {
+                        var loader = document.getElementById('email-loader');
+                        loader.classList.add('active');
                         var xhr = new XMLHttpRequest();
                         xhr.open('POST', '/contact', true);
                         xhr.setRequestHeader("Content-type", "application/json");
@@ -1319,6 +1343,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                             // Send success message to user
                             if (xhr.readyState === 4 && xhr.status === 200) {
                                 $scope.createNotification(xhr.responseText);
+                                loader.classList.remove('active');
                             }
                         }
                         xhr.send(JSON.stringify(jsonData));
@@ -1329,11 +1354,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     navWrap[f].classList.add('flat');
                 }
 
-                $timeout(function () {
-                    for (var t = 0; t < navWrap.length; t++) {
-                        navWrap[t].classList.add('transition', 'active');
-                    }
-                }, 0)
+
+                if ($scope.hasChangedView) {
+                    $timeout(function () {
+                        for (var t = 0; t < navWrap.length; t++) {
+                            navWrap[t].classList.add('transition', 'active');
+                        }
+                    }, 0)
+                }
 
                 lightMode.classList.add('contact'); // light mode
 
@@ -1369,7 +1397,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     '<h1>Saint Petersburg,</h1>' +
                     '<h1>Florida</h1>' +
                     '<br>' +
-                    '<a><span style="color: #57a3e4">@</span> : samc2198@gmail.com</a>' +
+                    '<a><span style="color: #57a3e4">@</span> : contact@samcraig.io</a>' +
                     '</div>' +
                     '</div>';
 
