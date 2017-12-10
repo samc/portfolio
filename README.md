@@ -1,5 +1,7 @@
 # Sam Craig's Personal Portfolio
 
+[Link](https://samcraig.io/)
+
 This is my first attempt at putting together an online portfolio - so if you have any suggestions or comments on the project or anything really, you can contact me at **contact@samcraig.io** or **@samcraigdev** on Twitter. Thanks for checking it out!
 
 ## Analysis and Preparation
