@@ -1,6 +1,5 @@
 require('./triangles');
 require('../css/style.css');
-require('../images/favicon.png');
 
 // console art / info
 var logoText = '\n' +
@@ -47,6 +46,7 @@ console.log(logoText);
 
 var app = angular.module('app', ['ngRoute']);
 
+// Compatibility event handler
 function isEventSupported(eventName) {
     var el = document.createElement('div');
     eventName = 'on' + eventName;
@@ -58,74 +58,6 @@ function isEventSupported(eventName) {
     el = null;
     return isSupported;
 }
-
-// var DOMEvents = {
-//     UIEvent: "abort DOMActivate error load resize scroll select unload",
-//     ProgressEvent: "abort error load loadend loadstart progress progress timeout",
-//     Event: "abort afterprint beforeprint cached canplay canplaythrough change chargingchange chargingtimechange checking close dischargingtimechange DOMContentLoaded downloading durationchange emptied ended ended error error error error fullscreenchange fullscreenerror input invalid languagechange levelchange loadeddata loadedmetadata noupdate obsolete offline online open open orientationchange pause pointerlockchange pointerlockerror play playing ratechange readystatechange reset seeked seeking stalled submit success suspend timeupdate updateready visibilitychange volumechange waiting",
-//     AnimationEvent: "animationend animationiteration animationstart",
-//     AudioProcessingEvent: "audioprocess",
-//     BeforeUnloadEvent: "beforeunload",
-//     TimeEvent: "beginEvent endEvent repeatEvent",
-//     OtherEvent: "blocked complete upgradeneeded versionchange",
-//     FocusEvent: "blur DOMFocusIn  Unimplemented DOMFocusOut  Unimplemented focus focusin focusout",
-//     MouseEvent: "click contextmenu dblclick mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup show",
-//     SensorEvent: "compassneedscalibration Unimplemented userproximity",
-//     OfflineAudioCompletionEvent: "complete",
-//     CompositionEvent: "compositionend compositionstart compositionupdate",
-//     ClipboardEvent: "copy cut paste",
-//     DeviceLightEvent: "devicelight",
-//     DeviceMotionEvent: "devicemotion",
-//     DeviceOrientationEvent: "deviceorientation",
-//     DeviceProximityEvent: "deviceproximity",
-//     MutationNameEvent: "DOMAttributeNameChanged DOMElementNameChanged",
-//     MutationEvent: "DOMAttrModified DOMCharacterDataModified DOMNodeInserted DOMNodeInsertedIntoDocument DOMNodeRemoved DOMNodeRemovedFromDocument DOMSubtreeModified",
-//     DragEvent: "drag dragend dragenter dragleave dragover dragstart drop",
-//     GamepadEvent: "gamepadconnected gamepaddisconnected",
-//     HashChangeEvent: "hashchange",
-//     KeyboardEvent: "keydown keypress keyup",
-//     MessageEvent: "message message message message",
-//     PageTransitionEvent: "pagehide pageshow",
-//     PopStateEvent: "popstate",
-//     StorageEvent: "storage",
-//     SVGEvent: "SVGAbort SVGError SVGLoad SVGResize SVGScroll SVGUnload",
-//     SVGZoomEvent: "SVGZoom",
-//     TouchEvent: "touchcancel touchend touchenter touchleave touchmove touchstart",
-//     TransitionEvent: "transitionend",
-//     WheelEvent: "wheel"
-// }
-//
-// var RecentlyLoggedDOMEventTypes = {};
-//
-// for (DOMEvent in DOMEvents) {
-//
-//     var DOMEventTypes = DOMEvents[DOMEvent].split(' ');
-//
-//     DOMEventTypes.filter(function (DOMEventType) {
-//         var DOMEventCategory = DOMEvent + ' ' + DOMEventType;
-//         document.addEventListener(DOMEventType, function (e) {
-//             if (RecentlyLoggedDOMEventTypes[DOMEventCategory]) return;
-//             RecentlyLoggedDOMEventTypes[DOMEventCategory] = true;
-//             setTimeout(function () {
-//                 RecentlyLoggedDOMEventTypes[DOMEventCategory] = false
-//             }, 5000);
-//             var isActive = e.target == document.activeElement;
-//             if (isActive) {
-//                 console.info(DOMEventCategory,
-//                     ' target=', e.target,
-//                     ' active=', document.activeElement,
-//                     ' isActive=', true);
-//             } else {
-//                 console.log(DOMEventCategory,
-//                     ' target=', e.target,
-//                     ' active=', document.activeElement,
-//                     ' isActive=', false);
-//             }
-//
-//         }, true);
-//     });
-//
-// }
 
 // configure our routes
 app.config(function ($routeProvider, $locationProvider) {
@@ -152,7 +84,7 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: '../views/contact.html',
             resolve: transitionDelay
         })
-        .otherwise({redirectTo : '/'});
+        .otherwise({redirectTo: '/'});
 
     $locationProvider.html5Mode(true);
 })
@@ -161,7 +93,7 @@ app.config(function ($routeProvider, $locationProvider) {
 var transitionDelay = {
     delay: function ($q, $timeout) {
         var delay = $q.defer();
-        $timeout(delay.resolve, 600);
+        $timeout(delay.resolve, 500);
         return delay.promise;
     }
 }
@@ -221,14 +153,16 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // reveal nav icons
             .add(function () {
                 var iconList = Array.from(icons);
-                function showRandomIcon(){
-                    setTimeout(function(){
+
+                function showRandomIcon() {
+                    setTimeout(function () {
                         var index = Math.floor(Math.random() * (iconList.length - 1));
                         iconList[index].style.opacity = 1;
                         iconList.splice(index, 1);
                         if (iconList.length > 0) showRandomIcon();
                     }, 80);
                 }
+
                 showRandomIcon();
 
             }, 'shutterStart+=2.8')
@@ -236,7 +170,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // total time for all icons to be revealed : timeout delay * icons.length = 720ms
             // delay from reveal set at : 2.8s + .72s = 4.52s
             .add(function () {
-                for(var a = 0; a < icons.length; a++){
+                for (var a = 0; a < icons.length; a++) {
                     icons[a].classList.add('transition');
                 }
             }, 'shutterStart+=4.52')
@@ -248,11 +182,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }, 'shutterStart+=3.1')
             // display mobile shake light mode reminder if being viewed from a phone
             .add(function () {
-                    if ($location.path() === '/skills'){
-                        $scope.createNotification('Scroll to rotate skills.');
-                    } else if ($location.path() === '/' && window.innerWidth <= $scope.mobileWidth){
-                        $scope.createNotification('Shake device to toggle night mode.')
-                    }
+                if ($location.path() === '/skills') {
+                    $scope.createNotification('Scroll to rotate skills.');
+                } else if ($location.path() === '/' && window.innerWidth <= $scope.mobileWidth) {
+                    $scope.createNotification('Shake device to toggle night mode.')
+                }
             }, 'shutterStart+=3.1')
         tl.play();
 
@@ -261,14 +195,16 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //------------------------------
 
         $scope.currentView = $location.path();
-        $scope.currentViewEl = function () {
-            return document.getElementById('view-container')
-        }
         $scope.hasChangedView = false;
         $scope.hasViewedSkills = false;
         $scope.mobileWidth = 768;
+
         $scope.isDark = function () {
             return (localStorage.getItem('color') === 'dark')
+        };
+
+        $scope.currentViewEl = function () {
+            return document.getElementById('view-container')
         };
 
         //------------------------------
@@ -316,6 +252,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 canvasRenderer,
                 light,
                 hasBeenRendered;
+
             function initialise() {
                 createRenderer();
                 createScene();
@@ -325,6 +262,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 animate()
                 hasBeenRendered = true;
             }
+
             function createRenderer() {
                 canvasRenderer = new FSS.CanvasRenderer;
                 if (renderer) {
@@ -334,9 +272,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 renderer.setSize(container.offsetWidth, container.offsetHeight);
                 output.appendChild(renderer.element)
             }
+
             function createScene() {
                 scene = new FSS.Scene
             }
+
             function createMesh() {
                 scene.remove(mesh);
                 renderer.clear();
@@ -345,6 +285,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 mesh = new FSS.Mesh(geometry, material);
                 scene.add(mesh)
             }
+
             function addLight() {
                 renderer.clear();
                 light = new FSS.Light(LIGHT.ambient, LIGHT.diffuse);
@@ -356,18 +297,22 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 LIGHT.pickedup = true;
                 LIGHT.currIndex++
             }
+
             function resize(width, height) {
                 renderer.setSize(width, height);
                 FSS.Vector3.set(center, renderer.halfWidth, renderer.halfHeight);
                 createMesh()
             }
+
             function animate() {
                 render();
                 requestAnimationFrame(animate)
             }
+
             function render() {
                 renderer.render(scene)
             }
+
             function addEventListeners() {
                 window.addEventListener('resize', onWindowResize);
                 window.addEventListener('mousemove', onMouseMove);
@@ -380,8 +325,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     addLight()
                 });
             }
+
             function onWindowResize() {
-                if (window.innerWidth > $scope.mobileWidth){
+                if (window.innerWidth > $scope.mobileWidth) {
                     container.classList.add('active');
                     if (hasBeenRendered) {
                         resize(container.offsetWidth, container.offsetHeight);
@@ -389,6 +335,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     } else initialise();
                 } else container.classList.remove('active');
             }
+
             function onMouseMove(event) {
                 if (window.innerWidth > $scope.mobileWidth) {
                     if (LIGHT.pickedup) {
@@ -398,11 +345,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 }
             }
+
             if (window.innerWidth > $scope.mobileWidth) initialise();
             addEventListeners();
-        }) ();
+        })();
 
-        $scope.changeView = function(route) {
+        $scope.changeView = function (route) {
 
             $scope.hasChangedView = true;
 
@@ -413,9 +361,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
 
-        //------------------------------------
+        //-----------------------------------
         // Toggle Light Mode on Device Shake
-        //------------------------------------
+        //-----------------------------------
 
         if (window.DeviceMotionEvent !== 'undefined') {
             // Shake sensitivity (a lower number is more)
@@ -453,7 +401,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }, 150);
         }
 
-        $scope.$on('$routeChangeStart', function(){
+
+        // Static elements
+        var navBars = document.getElementsByTagName('NAV'),
+            navIcons = document.querySelectorAll('.nav-icon'),
+            lightMode = document.getElementById('light-mode'),
+            background = document.getElementById('background');
+
+        $scope.$on('$routeChangeStart', function () {
 
             // set the current route for reference for view comparison check
             $scope.currentView = $location.path();
@@ -462,18 +417,17 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // Transition Animations
             //------------------------------
 
-            document.getElementById('light-mode').classList.remove('active');
-            document.getElementById('background').classList.add('transition');
+            lightMode.classList.remove('active');
+            background.classList.add('transition');
 
-            var navBanners = document.getElementsByTagName('NAV'),
-                viewChildren = document.getElementById('view-container').childNodes;
+            var viewChildren = document.getElementById('view-container').childNodes;
 
             for (var c = 0; c < viewChildren.length; c++) {
                 viewChildren[c].classList.remove('active');
             }
 
-            for (var b = 0; b < navBanners.length; b++) {
-                navBanners[b].classList.remove('active');
+            for (var b = 0; b < navBars.length; b++) {
+                navBars[b].classList.remove('active');
             }
 
             var viewChildrenNew = document.getElementById('view-container').childNodes;
@@ -481,12 +435,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             for (var n = 0; n < viewChildrenNew.length; n++) {
                 viewChildrenNew[n].classList.add('exit');
             }
-        })
-
-        // light mode color swapping
-
-        var navIcons = document.querySelectorAll('.nav-icon'),
-            navBanners = document.querySelectorAll('nav');
+        });
 
         //view elements will change and are updated in the $viewContentLoaded handler
 
@@ -500,6 +449,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.body
             ]
 
+        // Handle color changes static elements, only issue color change for current view if it is populated.
         $scope.toggleColors = function () {
             if (document.getElementById('map') !== null) $scope.updateMap();
 
@@ -509,8 +459,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             for (var n = 0; n < navIcons.length; n++) {
                 navIcons[n].classList.toggle('dark');
             }
-            for (var b = 0; b < navBanners.length; b++) {
-                navBanners[b].classList.toggle('dark');
+            for (var b = 0; b < navBars.length; b++) {
+                navBars[b].classList.toggle('dark');
             }
 
             if (!($scope.currentViewEl() === null || $scope.currentViewEl() === undefined)) $scope.toggleViewColors();
@@ -523,7 +473,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
         // toggle local storage value 'color' when necessary
-        $scope.toggleLocalStorage = function() {
+        $scope.toggleLocalStorage = function () {
             if (localStorage.getItem('color') === null) {
                 localStorage.setItem('color', 'dark');
             } else {
@@ -531,27 +481,32 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
         }
 
-        var background = document.getElementById('background'),
-            toggleBackgroundColorEvent = new Event('togglecolor');
+        // Custom event for background tessellation color change
+        var toggleBackgroundColorEvent = new Event('togglecolor');
 
-        document.getElementById('light-mode').addEventListener('mousedown', function (e) {
+        // Color change handler
+        function handleColorChange(e){
             e.preventDefault();
             e.stopImmediatePropagation();
             $scope.toggleLocalStorage();
             $scope.toggleColors();
             background.dispatchEvent(toggleBackgroundColorEvent);
+        }
+
+        // On "MOUSEDOWN" mousepress, toggle color
+        document.getElementById('light-mode').addEventListener('mousedown', function (e) {
+            handleColorChange(e);
         });
+
+        // On "ENTER" keypress, toggle color
         document.getElementById('light-mode').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                $scope.toggleLocalStorage();
-                $scope.toggleColors();
-                background.dispatchEvent(toggleBackgroundColorEvent);
+                handleColorChange(e);
             }
         })
 
-        if (localStorage.getItem('color') === 'dark' && !$scope.hasChangedView) {
+        // Change color to dark mode on initial if set in previous instance
+        if (localStorage.getItem('color') === 'dark') {
             $scope.toggleColors();
         }
 
@@ -566,7 +521,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             var notificationWidth = parseFloat(window.getComputedStyle(notification, null).getPropertyValue('width'));
             notification.style.left = '-' + notificationWidth + 'px';
             console.log(notification.style.left, '-' + (notificationWidth + 20) + 'px');
-            notification.style.transform = 'translateX(' + (notificationWidth + 20) +'px)';
+            notification.style.transform = 'translateX(' + (notificationWidth + 20) + 'px)';
             notification.classList.add('active');
 
             $timeout(function () {
@@ -580,8 +535,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //------------------------------
 
         function adjustNavBars() {
-
-            var navBars = document.getElementsByTagName('NAV');
 
             if ($location.path() !== '/contact') {
                 if (window.innerWidth <= $scope.mobileWidth) {
@@ -598,6 +551,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         window.addEventListener('resize', adjustNavBars);
 
     }, 0)
+
+
 
     $scope.updateView = function () {
         var viewChildrenNew = document.getElementById('view-container').childNodes;
@@ -921,6 +876,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         }
     ]
 
+    // Return appropriate style relative to light mode
     $scope.style = function () {
         return ($scope.isDark()) ? styleDark : styleLight;
     };
@@ -960,6 +916,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         adjustHeaderCovers();
         $window.addEventListener('resize', adjustHeaderCovers);
 
+        // Delay before page transition is issued is 500ms following Angular Route's 500ms Promise
+        // to total 1 second transition
         $timeout(function () {
 
             function adjustContentSliders() {
@@ -972,6 +930,9 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }
             }
 
+            // View static references
+            var lightMode = document.getElementById('light-mode'),
+                navBars = document.getElementsByTagName('NAV');
 
             adjustContentSliders();
             $window.addEventListener('resize', adjustContentSliders);
@@ -989,10 +950,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             var currentRoute = $scope.currentView.slice(1, $scope.currentView.length);
             if (currentRoute === '') currentRoute = 'home';
             document.querySelector('.' + currentRoute).classList.add('active');
-
-            // 'contact' specific element manipulations
-            var navWrap = document.querySelectorAll('nav'),
-                lightMode = document.getElementById('light-mode');
 
             // skills route handler
             if ($location.path() === '/skills') {
@@ -1064,18 +1021,17 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }, 2000)
 
                 const topStart = -40,
-                      leftStart = 0;
+                    leftStart = 0;
 
                 var touchStart,
                     touchEnd;
 
 
-
-                skillWrap.addEventListener('touchstart', function(e){
+                skillWrap.addEventListener('touchstart', function (e) {
                     touchStart = e.changedTouches;
                 }, false);
 
-                skillWrap.addEventListener('touchend', function(e){
+                skillWrap.addEventListener('touchend', function (e) {
                     touchEnd = e.changedTouches;
                     console.log(touchStart, touchEnd);
                 }, false);
@@ -1215,15 +1171,15 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
 
             // work & about overflow styling
-            if($location.path() === '/work' || $location.path() === '/about'){
+            if ($location.path() === '/work' || $location.path() === '/about') {
 
                 var container = document.querySelector('.work-container') || document.querySelector('.header-container.about'),
                     wrapper = container.parentNode;
 
-                container.addEventListener('scroll', function(){
-                    if (window.innerWidth <= $scope.mobileWidth){
-                        if (container.scrollTop !== 0){
-                            if(container.scrollHeight - container.offsetHeight === container.scrollTop){
+                container.addEventListener('scroll', function () {
+                    if (window.innerWidth <= $scope.mobileWidth) {
+                        if (container.scrollTop !== 0) {
+                            if (container.scrollHeight - container.offsetHeight === container.scrollTop) {
                                 wrapper.classList.add('fade-top');
                             }
                             else {
@@ -1311,6 +1267,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                         dataSuccess = true,
                         jsonData = {};
 
+                    // JSON data schema for post
+                    // {
+                    //      name:
+                    //      email:
+                    //      message:
+                    // }
                     for (var i = 0; i < dataArray.length - 1; i++) {
                         var inputTarget = dataArray[i],
                             inputVal = inputTarget.value,
@@ -1318,12 +1280,15 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                             inputLabel = inputTarget.parentNode.childNodes[1];
 
                         jsonData[inputID] = inputVal;
+
+                        // Do not issue POST request if any input values are missing
                         if (inputVal.length === 0) {
                             dataSuccess = false;
                             inputLabel.classList.add('error', 'focus');
                         }
                     }
 
+                    // If all inputs contain a valid value, send POST request
                     if (dataSuccess) {
                         var loader = document.getElementById('email-loader');
                         loader.classList.add('active');
@@ -1342,20 +1307,27 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 });
 
-                for (var f = 0; f < navWrap.length; f++) {
-                    navWrap[f].classList.add('flat');
+                // Change nav bar styling
+                for (var f = 0; f < navBars.length; f++) {
+                    navBars[f].classList.add('flat');
                 }
 
-
+                // Specific view change styling from "angled" to "flat" to prevent translation issues
+                // and issue reintroduction animation
                 if ($scope.hasChangedView) {
                     $timeout(function () {
-                        for (var t = 0; t < navWrap.length; t++) {
-                            navWrap[t].classList.add('transition', 'active');
+                        for (var t = 0; t < navBars.length; t++) {
+                            navBars[t].classList.add('transition', 'active');
                         }
                     }, 0)
                 }
 
-                lightMode.classList.add('contact'); // light mode
+                // Specific position change for contact view
+                lightMode.classList.add('contact');
+
+                //------------------------------------
+                // Google Map Implementation
+                //------------------------------------
 
                 var uluru = {lat: 27.791959, lng: -82.723924};
 
@@ -1383,6 +1355,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     })
                 }
 
+                // InfoWindow contents
                 var contentString =
                     '<div id="iw-content">' +
                     '<h1>Samuel Craig</h1>' +
@@ -1397,6 +1370,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     content: contentString
                 })
 
+                // Initiate marker depending on current light mode
                 var marker = new google.maps.Marker({
                     position: uluru,
                     map: map,
@@ -1407,13 +1381,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                 google.maps.InfoWindow.prototype.isOpen = true;
 
+                // Close InfoWindow on map click
                 google.maps.event.addListener(map, 'click', function () {
                     if (infowindow.isOpen) {
                         infowindow.isOpen = false;
                         infowindow.close();
                     }
                 });
-
+                // Close InfoWindow on marker click
                 google.maps.event.addListener(marker, 'click', function () {
                     if (infowindow.isOpen) {
                         infowindow.isOpen = false;
@@ -1424,6 +1399,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 });
 
+                // Close InfoWindow on "x" click
                 google.maps.event.addListener(infowindow, 'closeclick', function () {
                     infowindow.isOpen = false;
                 });
@@ -1435,14 +1411,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 lightMode.classList.remove('contact');
 
                 if ($scope.hasChangedView) {
-                    for (var w = 0; w < navWrap.length; w++) {
+                    for (var w = 0; w < navBars.length; w++) {
                         if (window.innerWidth <= $scope.mobileWidth) {
-                            navWrap[w].classList.add('flat', 'transition');
-                        } else navWrap[w].classList.remove('flat');
+                            navBars[w].classList.add('flat', 'transition');
+                        } else navBars[w].classList.remove('flat');
                     }
                     $timeout(function () {
-                        for (var w = 0; w < navWrap.length; w++) {
-                            navWrap[w].classList.add('transition', 'active');
+                        for (var w = 0; w < navBars.length; w++) {
+                            navBars[w].classList.add('transition', 'active');
                         }
                     }, 100)
                 }
@@ -1451,20 +1427,19 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // trigger nav transition animations
             if ($scope.hasChangedView) {
                 if (window.innerWidth > $scope.mobileWidth) {
-                    for (var n = 0; n < navWrap.length; n++) {
-                        navWrap[n].classList.remove('transition');
+                    for (var n = 0; n < navBars.length; n++) {
+                        navBars[n].classList.remove('transition');
                     }
                 }
                 $scope.updateView();
                 lightMode.classList.add('active');
                 document.getElementById('background').classList.remove('transition');
             }
-        }, 600)
+        }, 500)
     })
 });
 
-
-function tween(o, x, y,  durationSecs, onComplete) {
+function tween(o, x, y, durationSecs, onComplete) {
     var fps = 30, count = 0, stopAt = fps * durationSecs, easef = Quad_easeInOut;
     var f = function () {
         count++;
@@ -1484,7 +1459,7 @@ function tween_stop(o) {
 }
 
 function tween_setProperty(o, x, y) {
-    o.style.cssText += ';transform:translate3d(' + x + 'vw,' + y +'vh,0);' ;
+    o.style.cssText += ';transform:translate3d(' + x + 'vw,' + y + 'vh,0);';
 }
 
 function Quad_easeInOut(t, b, c, d) {
