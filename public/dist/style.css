@@ -158,20 +158,22 @@ nav {
     position: absolute; }
     nav .nav-wrapper.top {
       bottom: 28vw; }
+      nav .nav-wrapper.top .nav-icon {
+        width: 3.5vw;
+        height: 3.5vw; }
     nav .nav-wrapper.bot {
       top: 26vw; }
-      nav .nav-wrapper.bot .nav-icon:hover svg, nav .nav-wrapper.bot .nav-icon:focus svg {
-        opacity: 0 !important; }
-      nav .nav-wrapper.bot .nav-icon:hover .hover-text, nav .nav-wrapper.bot .nav-icon:focus .hover-text {
-        opacity: 1; }
+      nav .nav-wrapper.bot .nav-icon {
+        width: 3vw;
+        height: 3vw; }
+        nav .nav-wrapper.bot .nav-icon:hover svg, nav .nav-wrapper.bot .nav-icon:focus svg {
+          opacity: 0 !important; }
+        nav .nav-wrapper.bot .nav-icon:hover .hover-text, nav .nav-wrapper.bot .nav-icon:focus .hover-text {
+          opacity: 1; }
     nav .nav-wrapper .nav-icon {
       z-index: 900;
       -webkit-transition: opacity ease-in 1s;
       transition: opacity ease-in 1s;
-      width: 3.5vw;
-      height: 3.5vw;
-      background: no-repeat .7vw;
-      background-size: 2.8vw;
       display: inline-block;
       -webkit-transform: rotate(67deg);
               transform: rotate(67deg);
@@ -730,7 +732,7 @@ input, textarea {
         float: right;
         margin-right: -8vw;
         padding: 0.7vh .5vw 0.5vh 0.7vw;
-        letter-spacing: 3px;
+        letter-spacing: .1vw;
         cursor: pointer;
         -webkit-appearance: none; }
         .contact-form form > div > input.submit-button:hover, .contact-form form > div textarea.submit-button:hover {
@@ -1002,9 +1004,9 @@ input, textarea {
       color: #4c4f65; }
       .skill-container #skill-wrap > .skill.active {
         opacity: .9;
-        -webkit-transform: translateY(-3vh);
-                transform: translateY(-3vh);
-        font-size: 9vh;
+        -webkit-transform: translateY(-1.5vh);
+                transform: translateY(-1.5vh);
+        font-size: 7vh;
         color: #57a3e4;
         letter-spacing: .1vw; }
 
@@ -1090,7 +1092,7 @@ input, textarea {
   #notification.active {
     opacity: 0.9; }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1200px) {
   .view.home {
     display: inline-block;
     position: absolute;
@@ -1098,9 +1100,9 @@ input, textarea {
     left: 0; }
 
   .logo-big {
-    top: 61vh; }
+    top: 58vh; }
     .logo-big svg {
-      height: 56vh;
+      height: 56vw;
       width: 56vw;
       min-height: 0;
       min-width: 0; }
@@ -1110,8 +1112,8 @@ input, textarea {
 
   .view.about, .view.skills, .skill-container {
     left: 50vw !important;
-    -webkit-transform: translateX(-50%) translateY(-50%);
-            transform: translateX(-50%) translateY(-50%); }
+    -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0); }
 
   .view.about {
     top: 16vh !important;
@@ -1172,14 +1174,15 @@ input, textarea {
     .header-container.about .header-content-body {
       margin-left: 0 !important;
       margin-top: 2.2vh !important; }
-      .header-container.about .header-content-body .header-info-wrap {
-        margin-top: 0 !important; }
-      .header-container.about .header-content-body .header.big {
-        font-size: 11vw !important; }
-      .header-container.about .header-content-body .header.body {
-        padding-top: .5vh !important;
-        font-size: 3.4vw !important;
-        width: 82vw; }
+    .header-container.about .header-info-wrap {
+      margin-top: 0 !important;
+      padding-bottom: 2vh; }
+    .header-container.about .header.big {
+      font-size: 11vw !important; }
+    .header-container.about .header.body {
+      padding-top: .5vh !important;
+      font-size: 3.4vw !important;
+      width: 82vw; }
 
   .header-container.skills .header.big {
     font-size: 11vw !important; }
@@ -1190,9 +1193,16 @@ input, textarea {
     font-size: 3vw; }
 
   .skill-container {
-    height: 35vh !important;
-    top: 72vh !important;
-    width: 60vw !important; }
+    height: 34vh;
+    top: 72vh;
+    width: 60vw !important;
+    -webkit-transform: translate3d(-50%, -50%, 0) scale(0.9);
+            transform: translate3d(-50%, -50%, 0) scale(0.9); }
+    .skill-container.safari {
+      height: 21vh !important;
+      top: 65vh !important; }
+      .skill-container.safari > #skill-wrap {
+        top: -49vh !important; }
 
   #skill-wrap {
     text-align: center !important;
@@ -1203,11 +1213,13 @@ input, textarea {
   .skill {
     margin-left: 0 !important;
     font-size: 6vw !important;
-    height: 7vh !important; }
+    height: 7vh !important;
+    -webkit-transition: all ease-in-out .7s;
+    transition: all ease-in-out .7s; }
     .skill.active {
-      font-size: 6.8vw !important;
-      -webkit-transform: translateY(-1vh) !important;
-              transform: translateY(-1vh) !important; }
+      font-size: 6vw !important;
+      -webkit-transform: scale(1.3) !important;
+              transform: scale(1.3) !important; }
 
   .work-wrapper {
     width: 90vw !important;
@@ -1272,6 +1284,9 @@ input, textarea {
               padding-bottom: 2vh !important; }
             .work-wrapper .work-container .work-list .work-panel .work-panel-header h2 {
               font-size: 4vw !important; }
+            .work-wrapper .work-container .work-list .work-panel .work-panel-header span {
+              font-size: 4.2vw !important;
+              padding: 1vh 2vw 1vh; }
           .work-wrapper .work-container .work-list .work-panel:hover .work-panel-cover {
             -webkit-transform: none !important;
                     transform: none !important; }
@@ -1301,7 +1316,8 @@ input, textarea {
       width: 80vw; }
     .contact-form #submit {
       height: 5vh !important;
-      padding: 0.7vh .5vw 0.5vh 1vw !important; }
+      padding: 1.5vw 2.5vw 6.5vw 2.5vw !important;
+      border-radius: 1vw; }
 
   .skill-container.active-f > #skill-wrap {
     margin-top: 0 !important; }
@@ -1313,5 +1329,18 @@ input, textarea {
     -webkit-transform: translateX(-50%) translateY(-40%) !important;
             transform: translateX(-50%) translateY(-40%) !important;
     font-size: 3vw !important; } }
+#landscape {
+  z-index: 9999;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  display: none;
+  background: #4c4f65; }
+
+@media only screen and (orientation: landscape) and (max-width: 800px), only screen and (orientation: landscape) and (max-height: 800px) {
+  #landscape {
+    display: inline-block; } }
 .development {
   cursor: not-allowed !important; }

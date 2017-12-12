@@ -154,7 +154,7 @@ body {
 
 /* START NAV BANNERS */
 
-$w-constant: 3.5vw;
+$w-constant: 3vw;
 
 // nav banner starting location off screen
 $nav-start-x: 125.26vw;
@@ -198,25 +198,29 @@ nav {
     position: absolute;
     &.top {
       bottom: 28vw;
+      .nav-icon {
+        width: 3.5vw;
+        height: 3.5vw;
+      }
     }
     &.bot {
       top: 26vw;
-      .nav-icon:hover, .nav-icon:focus {
-        svg {
-          opacity: 0 !important;
-        }
-        .hover-text {
-          opacity: 1;
+      .nav-icon {
+        width: 3vw;
+        height: 3vw;
+        &:hover, &:focus {
+          svg {
+            opacity: 0 !important;
+          }
+          .hover-text {
+            opacity: 1;
+          }
         }
       }
     }
     .nav-icon {
       z-index: 900;
       transition: opacity ease-in 1s;
-      width: $w-constant;
-      height: $w-constant;
-      background: no-repeat .7vw; // (background-size - $w-constant) / 2
-      background-size: 2.8vw;
       display: inline-block;
       transform: rotate(67deg);
       margin-top: 2vw;
@@ -455,7 +459,7 @@ nav.flat {
   &.active-f {
     .cover {
       transform: translateX(0);
-      width: 0 !important
+      width: 0 !important;
     }
     .header.big, .header.info {
       opacity: 1;
@@ -590,10 +594,6 @@ nav.flat {
   font: 600 1vw 'Khula', sans-serif;
   width: 40vw;
   margin: 0;
-}
-
-#mobile-shake {
-
 }
 
 #light-mode {
@@ -844,7 +844,7 @@ input, textarea {
           float: right;
           margin-right: -8vw;
           padding: 0.7vh .5vw 0.5vh 0.7vw;
-          letter-spacing: 3px;
+          letter-spacing: .1vw;
           cursor: pointer;
           -webkit-appearance: none;
           &:hover {
@@ -1146,7 +1146,7 @@ input, textarea {
   display: inline-block;
   overflow: hidden;
   transition: all .2s;
-  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(10%, rgba(0, 0, 0, 1)), color-stop(90%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
   &.active-f > #skill-wrap {
     margin-top: 0;
     margin-left: 0;
@@ -1175,8 +1175,8 @@ input, textarea {
       color: #4c4f65;
       &.active {
         opacity: .9;
-        transform: translateY(-3vh);
-        font-size: 9vh;
+        transform: translateY(-1.5vh);
+        font-size: 7vh;
         color: #57a3e4;
         letter-spacing: .1vw;
       }
@@ -1231,9 +1231,9 @@ input, textarea {
   }
 }
 
-// Phone & Tablet Styling
+// Mobile Styling
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1200px) {
   .view.home {
     display: inline-block;
     position: absolute;
@@ -1241,9 +1241,9 @@ input, textarea {
     left: 0;
   }
   .logo-big {
-    top: 61vh;
+    top: 58vh;
     svg {
-      height: 56vh;
+      height: 56vw;
       width: 56vw;
       min-height: 0;
       min-width: 0;
@@ -1254,7 +1254,7 @@ input, textarea {
   }
   .view.about, .view.skills, .skill-container {
     left: 50vw !important;
-    transform: translateX(-50%) translateY(-50%);
+    transform: translate3d(-50%, -50%, 0);
   }
   .view.about {
     top: 16vh !important;
@@ -1262,12 +1262,12 @@ input, textarea {
     left: 9vw !important;
     width: 82vw !important;
     transform: none !important;
-    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 1)), color-stop(90%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
     &.fade-top {
-      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), to(rgba(0,0,0,1))) !important;
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(10%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 1))) !important;
     }
     &.fade-top-bottom {
-      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(10%, rgba(0, 0, 0, 1)), color-stop(90%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
     }
   }
   .view.skills {
@@ -1323,18 +1323,19 @@ input, textarea {
     .header-content-body {
       margin-left: 0 !important;
       margin-top: 2.2vh !important;
-      .header-info-wrap {
-        margin-top: 0 !important;
+    }
+    .header-info-wrap {
+      margin-top: 0 !important;
+      padding-bottom: 2vh;
+    }
+    .header {
+      &.big {
+        font-size: 11vw !important;
       }
-      .header {
-        &.big {
-          font-size: 11vw !important;
-        }
-        &.body {
-          padding-top: .5vh !important;
-          font-size: 3.4vw !important;
-          width: 82vw;
-        }
+      &.body {
+        padding-top: .5vh !important;
+        font-size: 3.4vw !important;
+        width: 82vw;
       }
     }
   }
@@ -1354,9 +1355,17 @@ input, textarea {
     }
   }
   .skill-container {
-    height: 35vh !important;
-    top: 72vh !important;
+    height: 34vh;
+    top: 72vh;
     width: 60vw !important;
+    transform: translate3d(-50%, -50%, 0) scale(.9);
+    &.safari {
+      height: 21vh !important;
+      top: 65vh !important;
+      > #skill-wrap {
+        top: -49vh !important;
+      }
+    }
   }
   #skill-wrap {
     text-align: center !important;
@@ -1368,9 +1377,10 @@ input, textarea {
     margin-left: 0 !important;
     font-size: 6vw !important;
     height: 7vh !important;
+    transition: all ease-in-out .7s;
     &.active {
-      font-size: 6.8vw !important;
-      transform: translateY(-1vh) !important;
+      font-size: 6vw !important;
+      transform: scale(1.3) !important;
     }
   }
   .work-wrapper {
@@ -1379,12 +1389,12 @@ input, textarea {
     left: 5vw !important;
     bottom: 16vh;
     overflow: hidden;
-    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 1)), color-stop(90%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
     &.fade-top {
-      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), to(rgba(0,0,0,1))) !important;
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(10%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 1))) !important;
     }
     &.fade-top-bottom {
-      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(10%, rgba(0,0,0,1)), color-stop(90%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(10%, rgba(0, 0, 0, 1)), color-stop(90%, rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
     }
     .work-container {
       width: 110%;
@@ -1438,6 +1448,10 @@ input, textarea {
             h2 {
               font-size: 4vw !important;
             }
+            span {
+              font-size: 4.2vw !important;
+              padding: 1vh 2vw 1vh;
+            }
           }
           &:hover {
             .work-panel-cover {
@@ -1490,7 +1504,8 @@ input, textarea {
     }
     #submit {
       height: 5vh !important;
-      padding: 0.7vh .5vw 0.5vh 1vw !important;
+      padding: 1.5vw 2.5vw 6.5vw 2.5vw !important;
+      border-radius: 1vw;
     }
   }
   .skill-container.active-f > #skill-wrap {
@@ -1504,6 +1519,22 @@ input, textarea {
     font-size: 3vw !important;
   }
 }
+
+// Landscape Panel
+#landscape {
+  z-index: 9999;
+  position: absolute;
+  left: 0;  right: 0;  bottom: 0;  top: 0;
+  display: none;
+  background: $color-main /*url('./images/landscape.png')*/;
+}
+
+@media only screen and (orientation:landscape) and (max-width: 800px), only screen and (orientation:landscape) and (max-height: 800px) {
+  #landscape {
+    display: inline-block;
+  }
+}
+
 
 .development {
   cursor: not-allowed !important;

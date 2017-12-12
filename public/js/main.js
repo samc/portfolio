@@ -100,7 +100,22 @@ var transitionDelay = {
 
 app.controller('view', function ($scope, $location, $timeout, $window) {
 
+    // $timeout is used to insure propagation of all angular scope elements
     $timeout(function () {
+
+        //------------------------------
+        // Angular Scope Variables
+        //------------------------------
+
+        $scope.currentView = $location.path();
+        $scope.hasChangedView = false;
+        $scope.hasViewedSkills = false;
+        $scope.mobileWidth = 1200;
+
+        // Check if user is on a mobile
+        $scope.isMobile = function(){
+            return window.innerWidth <= $scope.mobileWidth;
+        }
 
         //------------------------------
         // Home Page Animation Sequence
@@ -182,22 +197,13 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }, 'shutterStart+=3.1')
             // display mobile shake light mode reminder if being viewed from a phone
             .add(function () {
-                if ($location.path() === '/skills') {
+                if ($location.path() === '/skills' && window.innerWidth > $scope.mobileWidth) {
                     $scope.createNotification('Scroll to rotate skills.');
-                } else if ($location.path() === '/' && window.innerWidth <= $scope.mobileWidth) {
+                } else if ($location.path() === '/' && $scope.isMobile()) {
                     $scope.createNotification('Shake device to toggle night mode.')
                 }
             }, 'shutterStart+=3.1')
         tl.play();
-
-        //------------------------------
-        // Angular Scope Variables
-        //------------------------------
-
-        $scope.currentView = $location.path();
-        $scope.hasChangedView = false;
-        $scope.hasViewedSkills = false;
-        $scope.mobileWidth = 768;
 
         $scope.isDark = function () {
             return (localStorage.getItem('color') === 'dark')
@@ -485,7 +491,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         var toggleBackgroundColorEvent = new Event('togglecolor');
 
         // Color change handler
-        function handleColorChange(e){
+        function handleColorChange(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             $scope.toggleLocalStorage();
@@ -520,7 +526,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             notification.innerHTML = message;
             var notificationWidth = parseFloat(window.getComputedStyle(notification, null).getPropertyValue('width'));
             notification.style.left = '-' + notificationWidth + 'px';
-            console.log(notification.style.left, '-' + (notificationWidth + 20) + 'px');
             notification.style.transform = 'translateX(' + (notificationWidth + 20) + 'px)';
             notification.classList.add('active');
 
@@ -531,13 +536,13 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         }
 
         //------------------------------
-        // Mobile Style Handler
+        // Mobile Style Handlers
         //------------------------------
 
         function adjustNavBars() {
 
             if ($location.path() !== '/contact') {
-                if (window.innerWidth <= $scope.mobileWidth) {
+                if ($scope.isMobile()) {
                     navBars[0].classList.add('flat');
                     navBars[1].classList.add('flat');
                 } else {
@@ -549,9 +554,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
         adjustNavBars();
         window.addEventListener('resize', adjustNavBars);
-
     }, 0)
-
 
 
     $scope.updateView = function () {
@@ -954,16 +957,17 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             // skills route handler
             if ($location.path() === '/skills') {
 
-                if (!$scope.hasViewedSkills && $scope.hasChangedView) $scope.createNotification('Scroll to rotate skills.');
+                if (!$scope.hasViewedSkills && $scope.hasChangedView && window.innerWidth > $scope.mobileWidth) $scope.createNotification('Scroll to rotate skills.');
                 $scope.hasViewedSkills = true;
 
                 var skillWrap = document.getElementById('skill-wrap');
 
-                (function () {
-                    var styleTop = (window.innerWidth <= 768) ? '-42vh' : '-40vh';
+                // Detect Safari 3.0+ for use in fixing quirky styling issues in skills views in mobile
+                var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
 
-                    skillWrap.style.cssText = 'top:' + styleTop + ' !important;left:0vw !important';
-                })();
+                if ($scope.isMobile() && isSafari) {
+                    document.querySelector('.skill-container').classList.add('safari');
+                }
 
                 $scope.activeSkills = [];
                 $scope.totalSkills = [
@@ -1020,21 +1024,17 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     document.getElementById('skill-wrap').childNodes[17].classList.add('active');
                 }, 2000)
 
-                const topStart = -40,
-                    leftStart = 0;
-
-                var touchStart,
-                    touchEnd;
-
-
-                skillWrap.addEventListener('touchstart', function (e) {
-                    touchStart = e.changedTouches;
-                }, false);
-
-                skillWrap.addEventListener('touchend', function (e) {
-                    touchEnd = e.changedTouches;
-                    console.log(touchStart, touchEnd);
-                }, false);
+                // var touchStart,
+                //     touchEnd;
+                //
+                // skillWrap.addEventListener('touchstart', function (e) {
+                //     touchStart = e.changedTouches;
+                // }, false);
+                //
+                // skillWrap.addEventListener('touchend', function (e) {
+                //     touchEnd = e.changedTouches;
+                //     console.log(touchStart, touchEnd);
+                // }, false);
 
                 // check if user is still in the Stone Age
                 var wheelEvent = isEventSupported('wheel') ? 'wheel' : 'mousewheel';
@@ -1049,8 +1049,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                         skillFocused.classList.remove('active');
 
                         function animateScroll(scrollDis, callback) {
-                            var curLeftTop = (window.innerWidth <= $scope.mobileWidth) ? scrollDis * 7 : scrollDis * 8,
-                                curLeftFinal = (window.innerWidth <= $scope.mobileWidth) ? 0 : scrollDis * 4;
+                            var curLeftTop = ($scope.isMobile()) ? scrollDis * 7 : scrollDis * 8,
+                                curLeftFinal = ($scope.isMobile()) ? 0 : scrollDis * 4;
                             tween(skillWrap, -curLeftFinal, curLeftTop, 1, callback);
                         }
 
@@ -1068,9 +1068,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                                 }
                                 skillFocused.classList.add('active');
-                                var styleTop = (window.innerWidth <= 768) ? '-42vh' : topStart + 'vh';
-                                var styleLeft = (window.innerWidth <= 768) ? skillWrap.style.left + 'vw' : leftStart + 'vw';
-                                skillWrap.style.cssText = 'top:' + styleTop + ' !important;left:' + styleLeft + '!important';
+                                skillWrap.style.transform = 'none';
                                 scrollDis = 0;
                                 scrollingUp = false;
                                 scrollingUpSelf = false;
@@ -1096,9 +1094,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                                 }
                                 skillFocused.classList.add('active');
-                                var styleTop = (window.innerWidth <= 768) ? '-42vh' : topStart + 'vh';
-                                var styleLeft = (window.innerWidth <= 768) ? skillWrap.style.left + 'vw' : leftStart + 'vw';
-                                skillWrap.style.cssText = 'top:' + styleTop + ' !important;left:' + styleLeft + '!important';
+                                skillWrap.style.transform = 'none';
                                 scrollDis = 0;
                                 scrollingDown = false;
                                 scrollingDownSelf = false;
@@ -1167,7 +1163,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 // wait 3 seconds before issuing first scroll
                 $timeout(function () {
                     constantScroll();
-                }, 3000)
+                }, 2000)
             }
 
             // work & about overflow styling
@@ -1177,7 +1173,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     wrapper = container.parentNode;
 
                 container.addEventListener('scroll', function () {
-                    if (window.innerWidth <= $scope.mobileWidth) {
+                    if ($scope.isMobile()) {
                         if (container.scrollTop !== 0) {
                             if (container.scrollHeight - container.offsetHeight === container.scrollTop) {
                                 wrapper.classList.add('fade-top');
@@ -1412,7 +1408,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                 if ($scope.hasChangedView) {
                     for (var w = 0; w < navBars.length; w++) {
-                        if (window.innerWidth <= $scope.mobileWidth) {
+                        if ($scope.isMobile()) {
                             navBars[w].classList.add('flat', 'transition');
                         } else navBars[w].classList.remove('flat');
                     }

@@ -7,7 +7,7 @@ html(ng-app='app' lang='en')
         meta(name='description' content="Sam Craig's personal portfolio website")
         link(rel='manifest' href='/manifest.json')
         meta(name="google-site-verification" content="K7RSdQrffsj_FuFvXPIWlIJqsRzXZSVZknDcvo--LXo")
-        meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0')
         meta(name='HandheldFriendly' content='True')
         meta(name='msapplication-tap-highlight' content='no')
         link(rel='canonical' href='https://samcraig.io')
@@ -20,7 +20,7 @@ html(ng-app='app' lang='en')
         meta(itemprop='description' content="Sam Craig's personal portfolio website")
         meta(itemprop='image' content='https://samcraig.io/images/twitt.png')
 
-        meta(name='apple-mobile-web-app-capable' content='yes')
+        meta(name='' content='yes')
         meta(name='apple-mobile-web-app-status-bar-style' content='black-translucent')
         meta(name='apple-mobile-web-app-title' content='Sam Craig - Full Stack Web Developer')
         link(rel="apple-touch-icon" href="images/mobile-icon.png")
@@ -152,9 +152,10 @@ html(ng-app='app' lang='en')
                 .t-slide.one
                 .t-slide.two
                 .t-slide.three
-            #mobile-shake
+
             #view-container(ng-view).ng-cloak
+            #landscape
             #notification
             #background.container
                 #output.container
-            script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")
+        script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDicAF7bfpFCq_PVEO6yQpr0JevPzeL3Xs")
