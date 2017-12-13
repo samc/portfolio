@@ -165,7 +165,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.querySelector('.nav-bottom').classList.add('transition', 'active');
                 document.querySelector('.nav-top').classList.add('transition', 'active');
             }, 'shutterStart+=1.8')
-            // reveal nav icons
+            // reveal nav icons randomly
             .add(function () {
                 var iconList = Array.from(icons);
 
@@ -960,8 +960,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 if (!$scope.hasViewedSkills && $scope.hasChangedView && window.innerWidth > $scope.mobileWidth) $scope.createNotification('Scroll to rotate skills.');
                 $scope.hasViewedSkills = true;
 
-                var skillWrap = document.getElementById('skill-wrap');
-
                 // Detect Safari 3.0+ for use in fixing quirky styling issues in skills views in mobile
                 var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
 
@@ -1309,13 +1307,12 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }
 
                 // Specific view change styling from "angled" to "flat" to prevent translation issues
-                // and issue reintroduction animation
                 if ($scope.hasChangedView) {
                     $timeout(function () {
                         for (var t = 0; t < navBars.length; t++) {
                             navBars[t].classList.add('transition', 'active');
                         }
-                    }, 0)
+                    }, 100)
                 }
 
                 // Specific position change for contact view
@@ -1399,11 +1396,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 google.maps.event.addListener(infowindow, 'closeclick', function () {
                     infowindow.isOpen = false;
                 });
-            }
-            else {
+            } else {
                 // Remove 'contact' and 'flat' tags if view !contact and window
                 // size is greater than set mobile width
                 // (change in nav bar and light-mode positioning in parallel view)
+
                 lightMode.classList.remove('contact');
 
                 if ($scope.hasChangedView) {
@@ -1419,10 +1416,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }, 100)
                 }
             }
-
             // trigger nav transition animations
             if ($scope.hasChangedView) {
-                if (window.innerWidth > $scope.mobileWidth) {
+                if (!($scope.isMobile())) {
+                    // We remove transition class and add it 100ms later to let position change
+                    // propagate
                     for (var n = 0; n < navBars.length; n++) {
                         navBars[n].classList.remove('transition');
                     }
