@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const favicon = require('serve-favicon');
-const port = 3000;
+const port = 5000;
 const app = express();
 
 // view engine setup
