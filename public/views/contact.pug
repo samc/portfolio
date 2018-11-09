@@ -1,0 +1,38 @@
+.view.contact.ng-claok
+    .header-container.contact
+        .header-title-wrap
+            .cover
+            h1(class='header big first') get
+            h1(class='header big middle') in
+            h1(class='header big last') touch
+        .header-info-wrap
+            .cover
+            h2(class='header info') Talk about new projects, freelance inquiry, or just a chat.
+    .contact-form
+        form#contact(autocomplete='off' novalidate)
+                .short
+                    input#name(placeholder='Name' type='text' name='name')
+                    label
+                .short
+                    input#email(placeholder='Email' type='email' name='email')
+                    label
+                .text-area
+                    textarea#message(placeholder='Message' name='message')
+                    label
+                .submit-wrapper
+                    svg#email-loader(version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', x='0px', y='0px', width='24px', height='30px', viewbox='0 0 24 30', style='enable-background:new 0 0 50 50;', xml:space='preserve')
+                        rect(x='0', y='10', width='4', height='10', fill='#57a3e4', opacity='0.2')
+                            animate(attributename='opacity', attributetype='XML', values='0.2; 1; .2', begin='0s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='height', attributetype='XML', values='10; 20; 10', begin='0s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='y', attributetype='XML', values='10; 5; 10', begin='0s', dur='0.6s', repeatcount='indefinite')
+                        rect(x='8', y='10', width='4', height='10', fill='#57a3e4', opacity='0.2')
+                            animate(attributename='opacity', attributetype='XML', values='0.2; 1; .2', begin='0.15s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='height', attributetype='XML', values='10; 20; 10', begin='0.15s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='y', attributetype='XML', values='10; 5; 10', begin='0.15s', dur='0.6s', repeatcount='indefinite')
+                        rect(x='16', y='10', width='4', height='10', fill='#57a3e4', opacity='0.2')
+                            animate(attributename='opacity', attributetype='XML', values='0.2; 1; .2', begin='0.3s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='height', attributetype='XML', values='10; 20; 10', begin='0.3s', dur='0.6s', repeatcount='indefinite')
+                            animate(attributename='y', attributetype='XML', values='10; 5; 10', begin='0.3s', dur='0.6s', repeatcount='indefinite')
+                    input#submit(type='submit' class='submit-button error' value='SEND')
+.map-wrapper.ng-cloak
+    #map

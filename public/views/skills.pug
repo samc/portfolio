@@ -1,0 +1,27 @@
+.view.skills
+    .header-container.skills
+        .header-title-wrap
+            .cover
+            h1(class='header big first') my
+            h1(class='header big last') strengths
+        .header-info-wrap
+            .header-content-body
+                .line-left
+                p(class='header body skill-one')
+                    | The core of my skill set largely surrounds the
+                    strong  MERN
+                    |  stack, to achieve both a clear and dynamic user experience.
+                    | I also have some experience with mobile integration (Android and iOS). Strengthening my grasp of the mobile app development space is one of my primary goals for the near future.
+            .header-content-body.gap
+                .line-left
+                p(class='header body gap skill-two')
+                    | As of late, I've also been dabbling in some newer technologies like
+                    strong  Blockchain
+                    |  and
+                    Strong  React Native
+
+                    | . More than anything, I am always eager to learn and adapt to the ever changing facets of the web.
+.skill-container
+    #skill-wrap
+        .skill(data-ng-repeat='skill in activeSkills track by $index' ng-cloak).
+            {{skill}}
