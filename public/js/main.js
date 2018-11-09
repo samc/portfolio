@@ -103,6 +103,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
     // $timeout is used to insure propagation of all angular scope elements
     $timeout(function () {
 
+
         //------------------------------
         // Angular Scope Variables
         //------------------------------
@@ -110,100 +111,115 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         $scope.currentView = $location.path();
         $scope.hasChangedView = false;
         $scope.hasViewedSkills = false;
-        $scope.mobileWidth = 1200;
+        $scope.mobileWidth = 1024;
+        $scope.navBarAngle = 0;
+        $scope.navBarX = 0;
+        $scope.navBarY = 0;
+
 
         // Check if user is on a mobile
-        $scope.isMobile = function(){
+        $scope.isMobile = function () {
             return window.innerWidth <= $scope.mobileWidth;
+        }
+        // Check if user is on a tablet
+        $scope.isTablet = function () {
+            return ((window.innerWidth <= 1024 || window.innerHeight < 768) && !($scope.isPortrait()));
+        }
+
+        // Check if user is on a mobile
+        $scope.isPortrait = function () {
+            return document.querySelector('body').clientWidth < document.querySelector('body').clientHeight;
         }
 
         //------------------------------
         // Home Page Animation Sequence
         //------------------------------
 
-        var outline = document.querySelector('.site-loader'), //          || loading border (left & bottom)
-            topBorder = outline.querySelector('.line.top'),//             || loading border (top)
-            rightBorder = outline.querySelector('.line.right'),//         || loading border (right)
-            slider = document.querySelector('.transition-sliders'),//     || opening transition sliders
-            icons = document.querySelectorAll('.nav-icon');//             || nav icons
+        var leftLine = document.querySelector('.line.left'),
+            rightLine = document.querySelector('.line.right'),
+            bottomLine = document.querySelector('.line.bottom'),
+            icons = document.querySelectorAll('.nav-icon');
 
-        var tl = new TimelineLite({paused: true});
+        if ($location.path() === '/contact' || $scope.isMobile() && $scope.isPortrait()) {
+            leftLine.style.visibility = 'visible';
+            rightLine.style.visibility = 'visible';
 
-        tl.timeScale(.8)
-            .add(function () {
-                outline.classList.add('active')
-            })
-            // start to expand width and height of bottom / left border
-            .to(outline, 0.6, {width: '100%', height: '100%', ease: Quad.easeIn})
-            .to(topBorder, 0.6, {width: '102%', ease: Expo.easeOut})
-            .to(rightBorder, 0.6, {height: '102%', ease: Expo.easeOut}, '-=.6')
-            .add(function () {
-                outline.style.borderTop = '8px solid transparent';
-                outline.style.borderRight = '8px solid transparent'
-            })
-            // after pseudo top & right lines animations are complete, hide to reveal proper borders introduced above
-            .to(topBorder, 0.1, {visibility: 'hidden'})
-            .to(rightBorder, 0.1, {visibility: 'hidden'}, '-=.1')
-            .to(outline, 0.5, {borderWidth: 0})
-            // visibility withheld to prevent pre-rendering with high refresh rate
-            .to(slider, 1, {visibility: 'visible'}, 'shutterStart')
-            .add(function () {
-                slider.classList.add('active');
-            }, 'shutterStart-=0.5')
-            // update angular view instance
-            .add(function () {
-                $scope.updateView();
-            })
-            // hide site loader to prevent masking
-            .add(function () {
-                outline.style.visibility = 'hidden';
-                outline.classList.remove('active');
-            }, 'shutterStart+=0.5')
-            // reveal background and nav bars
-            .add(function () {
-                document.getElementById('background').classList.add('active');
-                document.querySelector('.nav-bottom').classList.add('transition', 'active');
-                document.querySelector('.nav-top').classList.add('transition', 'active');
-            }, 'shutterStart+=1.8')
-            // reveal nav icons randomly
-            .add(function () {
-                var iconList = Array.from(icons);
+            leftLine.classList.add('move-y-flat');
+            rightLine.classList.add('move-y-flat');
+        } else if ($scope.isTablet()) {
+            bottomLine.style.visibility = 'visible';
+            bottomLine.classList.add('move-y');
+        } else {
+            leftLine.style.visibility = 'visible';
+            rightLine.style.visibility = 'visible';
 
-                function showRandomIcon() {
-                    setTimeout(function () {
-                        var index = Math.floor(Math.random() * (iconList.length - 1));
-                        iconList[index].style.opacity = 1;
-                        iconList.splice(index, 1);
-                        if (iconList.length > 0) showRandomIcon();
-                    }, 80);
-                }
+            leftLine.classList.add('move-y');
+            rightLine.classList.add('move-y');
 
-                showRandomIcon();
+            setTimeout(function () {
+                leftLine.classList.add('change-axis');
+                rightLine.classList.add('change-axis');
+            }, 810);
 
-            }, 'shutterStart+=2.8')
-            // change nav icon transition value after initial animation
-            // total time for all icons to be revealed : timeout delay * icons.length = 720ms
-            // delay from reveal set at : 2.8s + .72s = 4.52s
-            .add(function () {
-                for (var a = 0; a < icons.length; a++) {
-                    icons[a].classList.add('transition');
-                }
-            }, 'shutterStart+=4.52')
-            // hide transition sliders
-            .to(slider, 1, {visibility: 'hidden'}, 'shutterStart+=3.0')
-            // reveal light mode button
-            .add(function () {
-                document.getElementById('light-mode').classList.add('active');
-            }, 'shutterStart+=3.1')
-            // display mobile shake light mode reminder if being viewed from a phone
-            .add(function () {
-                if ($location.path() === '/skills' && window.innerWidth > $scope.mobileWidth) {
-                    $scope.createNotification('Scroll to rotate skills.');
-                } else if ($location.path() === '/' && $scope.isMobile()) {
-                    $scope.createNotification('Shake device to toggle night mode.')
-                }
-            }, 'shutterStart+=3.1')
-        tl.play();
+            setTimeout(function () {
+                leftLine.classList.add('move-x');
+                rightLine.classList.add('move-x');
+            }, 1100);
+        }
+
+        setTimeout(function () {
+            document.getElementById('background').classList.add('active');
+            document.querySelector('.nav-bottom').classList.add('transition', 'active');
+            document.querySelector('.nav-top').classList.add('transition', 'active');
+            leftLine.style.display = 'none';
+            rightLine.style.display = 'none';
+            bottomLine.style.display = 'none';
+        }, 1600);
+
+        // random icon reveal animation handler
+
+        setTimeout(function () {
+            var iconList = Array.from(icons);
+
+            function showRandomIcon() {
+                setTimeout(function () {
+                    var index = Math.floor(Math.random() * (iconList.length - 1));
+                    iconList[index].style.opacity = 1;
+                    iconList.splice(index, 1);
+                    if (iconList.length > 0) showRandomIcon();
+                }, 80);
+            }
+
+            showRandomIcon();
+        }, 1600);
+
+        // update angular view instance
+
+        setTimeout(function () {
+            $scope.updateView();
+        }, 1800)
+
+        // change nav icon transition value after initial animation
+        // total time for all icons to be revealed : timeout delay * icons.length = 720ms
+        // delay from reveal set at : 1600ms + 720ms = 2320ms
+
+        setTimeout(function () {
+            for (var a = 0; a < icons.length; a++) {
+                icons[a].classList.add('transition');
+            }
+        }, 2320);
+
+        // display mobile shake light mode reminder if being viewed from a phone
+        // display light mode toggle button
+
+        setTimeout(function () {
+            document.getElementById('light-mode').classList.add('active');
+            if ($location.path() === '/skills' && window.innerWidth > $scope.mobileWidth) {
+                $scope.createNotification('Scroll to rotate skills.');
+            } else if ($location.path() === '/' && $scope.isMobile()) {
+                $scope.createNotification('Shake device to toggle night mode.')
+            }
+        }, 2500)
 
         $scope.isDark = function () {
             return (localStorage.getItem('color') === 'dark')
@@ -212,6 +228,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         $scope.currentViewEl = function () {
             return document.getElementById('view-container')
         };
+
 
         //------------------------------
         // Flat Surface Shader (modified)
@@ -333,7 +350,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
 
             function onWindowResize() {
-                if (window.innerWidth > $scope.mobileWidth) {
+                if (!$scope.isMobile() && !$scope.isTablet()) {
                     container.classList.add('active');
                     if (hasBeenRendered) {
                         resize(container.offsetWidth, container.offsetHeight);
@@ -343,7 +360,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
 
             function onMouseMove(event) {
-                if (window.innerWidth > $scope.mobileWidth) {
+                if (!$scope.isMobile() && !$scope.isTablet()) {
                     if (LIGHT.pickedup) {
                         LIGHT.xPos = event.x - renderer.width / 2;
                         LIGHT.yPos = renderer.height / 2 - event.y;
@@ -352,7 +369,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 }
             }
 
-            if (window.innerWidth > $scope.mobileWidth) initialise();
+            if (!$scope.isMobile() && !$scope.isTablet()) initialise();
             addEventListeners();
         })();
 
@@ -430,16 +447,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
             for (var c = 0; c < viewChildren.length; c++) {
                 viewChildren[c].classList.remove('active');
+                viewChildren[c].classList.add('exit');
             }
 
             for (var b = 0; b < navBars.length; b++) {
                 navBars[b].classList.remove('active');
-            }
-
-            var viewChildrenNew = document.getElementById('view-container').childNodes;
-
-            for (var n = 0; n < viewChildrenNew.length; n++) {
-                viewChildrenNew[n].classList.add('exit');
             }
         });
 
@@ -451,7 +463,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                 document.getElementById('sun'),
                 document.getElementById('moon'),
                 document.getElementById('notification'),
-                document.querySelector('.transition-sliders'),
+                document.querySelector('.site-loader'),
                 document.body
             ]
 
@@ -540,16 +552,15 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
         //------------------------------
 
         function adjustNavBars() {
-
-            if ($location.path() !== '/contact') {
-                if ($scope.isMobile()) {
+            setTimeout(function () {
+                if (($scope.isMobile() && $scope.isPortrait()) || (!$scope.isTablet() && $location.path() === '/contact')) {
                     navBars[0].classList.add('flat');
                     navBars[1].classList.add('flat');
                 } else {
                     navBars[0].classList.remove('flat');
                     navBars[1].classList.remove('flat');
                 }
-            }
+            }, 0)
         }
 
         adjustNavBars();
@@ -908,10 +919,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     coverHeight = parseInt(window.getComputedStyle(coverParent, null).getPropertyValue('height')),
                     coverWidth = parseInt(window.getComputedStyle(coverParent, null).getPropertyValue('width'));
 
-                covers[c].style.height = coverHeight + (coverHeight * 0.05) + 'px';
-                covers[c].style.width = coverWidth + (coverWidth * 0.05) + 'px';
-                covers[c].style.top = coverHeight * 0.1 + 'px';
-                coverParent.style.paddingBottom = coverHeight * 0.1 + 'px';
+                covers[c].style.height = (coverHeight * 0.7) + 'px';
+                covers[c].style.width = (coverWidth * 0.7) + 'px';
             }
         }
 
@@ -987,13 +996,14 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     'MySQL',
                     'REST',
                     'Jade',
-                    'AJAX'
+                    'AJAX',
+                    'Java 8'
                 ];
 
                 // any set of 7 skills will be displayed relative to their order above,
                 // seemlessly matching once end of the array is met (on scroll)
 
-                var sMax = $scope.totalSkills.length - 1; // 0 -> 17
+                var sMax = $scope.totalSkills.length - 1;
 
                 $scope.activeStart = Math.floor(Math.random() * (sMax + 1));
                 $scope.activeEnd = ($scope.activeStart === 0) ? sMax : $scope.activeStart - 1;
@@ -1015,24 +1025,13 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     scrollingUpSelf = false,
                     scrollCatchInterval = 40,
                     scrollDirection = 'up',
-                    hasScrolledRecently = false;
+                    timeOfLastScroll = 0,
+                    totalSkills = $scope.totalSkills.length - 1;
 
                 $timeout(function () {
                     // 4th skill in active view window is scaled and highlighted
                     document.getElementById('skill-wrap').childNodes[17].classList.add('active');
                 }, 2000)
-
-                // var touchStart,
-                //     touchEnd;
-                //
-                // skillWrap.addEventListener('touchstart', function (e) {
-                //     touchStart = e.changedTouches;
-                // }, false);
-                //
-                // skillWrap.addEventListener('touchend', function (e) {
-                //     touchEnd = e.changedTouches;
-                //     console.log(touchStart, touchEnd);
-                // }, false);
 
                 // check if user is still in the Stone Age
                 var wheelEvent = isEventSupported('wheel') ? 'wheel' : 'mousewheel';
@@ -1047,8 +1046,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                         skillFocused.classList.remove('active');
 
                         function animateScroll(scrollDis, callback) {
-                            var curLeftTop = ($scope.isMobile()) ? scrollDis * 7 : scrollDis * 8,
-                                curLeftFinal = ($scope.isMobile()) ? 0 : scrollDis * 4;
+                            var curLeftTop = ($scope.isMobile() || $scope.isTablet()) ? scrollDis * 7 : scrollDis * 8,
+                                curLeftFinal = ($scope.isMobile() || $scope.isTablet()) ? 0 : scrollDis * 4;
                             tween(skillWrap, -curLeftFinal, curLeftTop, 1, callback);
                         }
 
@@ -1058,8 +1057,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                                     $scope.activeEnd--
                                     $scope.activeStart--
-                                    if ($scope.activeEnd < 0) $scope.activeEnd = 17;
-                                    if ($scope.activeStart < 0) $scope.activeStart = 17;
+                                    if ($scope.activeEnd < 0) $scope.activeEnd = totalSkills;
+                                    if ($scope.activeStart < 0) $scope.activeStart = totalSkills;
 
                                     $scope.activeSkills.unshift($scope.totalSkills[$scope.activeStart]);
                                     $scope.activeSkills.pop();
@@ -1070,11 +1069,6 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                                 scrollDis = 0;
                                 scrollingUp = false;
                                 scrollingUpSelf = false;
-                                if (e.deltaZ === 0) {
-                                    $timeout(function () {
-                                        hasScrolledRecently = false;
-                                    }, 3000);
-                                }
                             }, 0)
                         }
 
@@ -1084,8 +1078,8 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                                     $scope.activeEnd++
                                     $scope.activeStart++
-                                    if ($scope.activeEnd > 17) $scope.activeEnd = 0;
-                                    if ($scope.activeStart > 17) $scope.activeStart = 0;
+                                    if ($scope.activeEnd > totalSkills) $scope.activeEnd = 0;
+                                    if ($scope.activeStart > totalSkills) $scope.activeStart = 0;
 
                                     $scope.activeSkills.push($scope.totalSkills[$scope.activeEnd]);
                                     $scope.activeSkills.shift();
@@ -1096,36 +1090,35 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                                 scrollDis = 0;
                                 scrollingDown = false;
                                 scrollingDownSelf = false;
-                                if (e.deltaZ === 0) {
-                                    $timeout(function () {
-                                        hasScrolledRecently = false;
-                                    }, 3000);
-                                }
                             }, 0)
                         }
 
-                        if ((e.deltaY === 100 || e.deltaY === 3) && !scrollingUp && !scrollingDownSelf) { // (scroll down) add skill to bottom & remove skill from top
+                        // (scroll down) add skill to bottom & remove skill from top
+                        if ((e.deltaY === 100 || e.deltaY === 3) && !scrollingUp && !scrollingDownSelf) {
                             scrollDirection = 'down';
                             scrollDis--;
                             scrollingDown = true;
-                            if (e.deltaZ === 0) hasScrolledRecently = true;
+                            // used to differentiate between user scroll / programmatic scroll
+                            if (e.deltaZ === 0) timeOfLastScroll = Date.now();
                             var scd = scrollDis;
                             $timeout(function () {
                                 if (scrollDis === scd) {
-                                    if (scrollDis < -6) scrollDis = -6;
+                                    if (scrollDis < -4) scrollDis = -4;
                                     scrollingDownSelf = true;
                                     animateScroll(scrollDis, scrollDown);
                                 }
                             }, scrollCatchInterval)
-                        } else if ((e.deltaY === -100 || e.deltaY === -3) && !scrollingDown && !scrollingUpSelf) { // (scroll up) add skill to top & remove skill from bottom
+                            // (scroll up) add skill to top & remove skill from bottom
+                        } else if ((e.deltaY === -100 || e.deltaY === -3) && !scrollingDown && !scrollingUpSelf) {
                             scrollDirection = 'up';
                             scrollDis++;
                             scrollingUp = true;
-                            if (e.deltaZ === 0) hasScrolledRecently = true;
+                            // used to differentiate between user scroll / programmatic scroll
+                            if (e.deltaZ === 0) timeOfLastScroll = Date.now();
                             var scu = scrollDis;
                             $timeout(function () {
                                 if (scrollDis === scu) {
-                                    if (scrollDis > 5) scrollDis = 5;
+                                    if (scrollDis > 4) scrollDis = 4;
                                     scrollingUpSelf = true;
                                     animateScroll(scrollDis, scrollUp);
                                 }
@@ -1134,34 +1127,32 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 });
 
+                var constantScrollInterval;
+
                 function constantScroll() {
                     // prevents scrolling while changing views
                     if ($scope.currentView === '/skills') {
-                        $timeout(function () {
+                        // emulate scrolling of the skill list
+                        var scrollEvent = new WheelEvent('wheel', {
+                            deltaY: (scrollDirection === 'up') ? -100 : 100,
+                            deltaZ: 1 // used to differentiate between user scroll / programmatic scroll
+                        });
 
-                            // emulate scrolling of the skill list
-                            var scrollEvent = new WheelEvent('wheel', {
-                                'deltaY': (scrollDirection === 'up') ? -100 : 100,
-                                'deltaZ': 1 // used to differentiate between user scroll / programmatic scroll
-                            });
-
-                            if (!hasScrolledRecently) {
-                                // 3 scroll events are dispatched to mirror scrolling of 3 skills
-                                for (var r = 0; r < 3; r++) {
-                                    window.dispatchEvent(scrollEvent);
-                                }
-
-                            }
-                            constantScroll();
-                        }, 3000)
-                    }
+                        // 3 scroll events are dispatched to mirror scrolling of 3 skills
+                        for (var r = 0; r < 3; r++) {
+                            window.dispatchEvent(scrollEvent);
+                        }
+                    } else clearInterval(constantScrollInterval);
                 }
-
 
                 // wait 3 seconds before issuing first scroll
                 $timeout(function () {
                     constantScroll();
-                }, 2000)
+                    constantScrollInterval = setInterval(function () {
+                        var timeDifference = Math.floor((Date.now() - timeOfLastScroll) / 1000);
+                        if (timeDifference >= 3) constantScroll();
+                    }, 3000)
+                }, 5000)
             }
 
             // work & about overflow styling
@@ -1171,7 +1162,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     wrapper = container.parentNode;
 
                 container.addEventListener('scroll', function () {
-                    if ($scope.isMobile()) {
+                    if ($scope.isMobile() || $scope.isTablet()) {
                         if (container.scrollTop !== 0) {
                             if (container.scrollHeight - container.offsetHeight === container.scrollTop) {
                                 wrapper.classList.add('fade-top');
@@ -1267,6 +1258,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     //      email:
                     //      message:
                     // }
+
                     for (var i = 0; i < dataArray.length - 1; i++) {
                         var inputTarget = dataArray[i],
                             inputVal = inputTarget.value,
@@ -1301,9 +1293,11 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     }
                 });
 
-                // Change nav bar styling
-                for (var f = 0; f < navBars.length; f++) {
-                    navBars[f].classList.add('flat');
+                if (!$scope.isTablet()) {
+                    // Change nav bar styling
+                    for (var f = 0; f < navBars.length; f++) {
+                        navBars[f].classList.add('flat');
+                    }
                 }
 
                 // Specific view change styling from "angled" to "flat" to prevent translation issues
@@ -1314,6 +1308,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                         }
                     }, 100)
                 }
+
 
                 // Specific position change for contact view
                 lightMode.classList.add('contact');
@@ -1397,6 +1392,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
                     infowindow.isOpen = false;
                 });
             } else {
+
                 // Remove 'contact' and 'flat' tags if view !contact and window
                 // size is greater than set mobile width
                 // (change in nav bar and light-mode positioning in parallel view)
@@ -1405,7 +1401,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
 
                 if ($scope.hasChangedView) {
                     for (var w = 0; w < navBars.length; w++) {
-                        if ($scope.isMobile()) {
+                        if ($scope.isMobile() && $scope.isPortrait()) {
                             navBars[w].classList.add('flat', 'transition');
                         } else navBars[w].classList.remove('flat');
                     }
@@ -1418,7 +1414,7 @@ app.controller('view', function ($scope, $location, $timeout, $window) {
             }
             // trigger nav transition animations
             if ($scope.hasChangedView) {
-                if (!($scope.isMobile())) {
+                if (!$scope.isMobile() && !$scope.isTablet()) {
                     // We remove transition class and add it 100ms later to let position change
                     // propagate
                     for (var n = 0; n < navBars.length; n++) {

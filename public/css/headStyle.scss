@@ -1,0 +1,245 @@
+//vars
+$color-orange: #fb856f;
+$color-blue: #57a3e4;
+$color-main: #4c4f65;
+$color-secondary: #66697E;
+$color-main-dark: #5D6075;
+$color-secondary-dark: #15151e;
+$anim-trans-time: 2s;
+
+$c-b-d: cubic-bezier(.03, .88, .33, .98);
+
+$loading-line-length: 11.512vw;
+$loading-line-offset-up: calc(#{$loading-line-length} + 100vh);
+$loading-line-offset-down: calc(#{-$loading-line-length} - 100vh);
+
+$loading-line-length-flat: 9vh;
+$loading-line-offset-up-flat: calc(#{$loading-line-length-flat} + 100vh);
+$loading-line-offset-down-flat: calc(#{-$loading-line-length-flat} - 100vh);
+
+$loading-line-offset-right-tablet: calc(-100vw + 20px);
+
+.site-loader.dark .line {
+  border-color: #e3e3e5;
+}
+
+.line {
+  visibility: hidden;
+  opacity: .9;
+  position: fixed;
+  height: $loading-line-length;
+  width: 0;
+  border: $color-main solid;
+  transition: height .3s cubic-bezier(0,.5,1,.5), width .3s cubic-bezier(0,.5,1,.5), transform .8s cubic-bezier(.5,0,.5,1);
+  &.move-y-flat {
+    height: 9vh;
+    min-height: 50px;
+    transition: transform 1.6s $c-b-d !important;
+  }
+  &.change-axis {
+    height: 0;
+    width: $loading-line-length;
+  }
+}
+
+.line.left {
+  border-width: 0 0 6px 6px;
+  left: 0;
+  &.move-y-flat {
+    height: 9vh;
+    transform: translate3d(0, calc(#{$loading-line-offset-down-flat} + 1.5vh), 0);
+    top: $loading-line-offset-up-flat;
+  }
+  &.move-y {
+    transform: translate3d(0, $loading-line-offset-up, 0);
+    bottom: $loading-line-offset-up;
+  }
+  &.move-x {
+    transform: translate3d(46.5vw, $loading-line-offset-up, 0) !important;
+    transition: transform .5s $c-b-d;
+  }
+}
+
+.line.right {
+  border-width: 6px 6px 0 0;
+  right: 0;
+  &.move-y-flat {
+    transform: translate3d(0, calc(#{$loading-line-offset-up-flat} - 1.5vh), 0);
+    bottom: $loading-line-offset-up-flat;
+  }
+  &.move-y {
+    transform: translate3d(0, $loading-line-offset-down, 0);
+    top: $loading-line-offset-up;
+  }
+  &.move-x {
+    transform: translate3d(-46.5vw, $loading-line-offset-down, 0) !important;
+    transition: transform .5s $c-b-d;
+  }
+}
+
+.line.bottom {
+  border-width: 0 0 6px 0;
+  bottom: 0;
+  transition: transform 1.6s $c-b-d !important;
+  &.move-y {
+    width: 9vw;
+    transform: translate3d($loading-line-offset-right-tablet, 0, 0);
+    right: -9vw;
+  }
+}
+
+$w-constant: 3vw;
+
+// nav banner starting location off screen
+$nav-start-x: 125.26vw;
+$nav-start-y: -87vw;
+
+// destination after animation
+$nav-end-x: 24vw;
+$nav-end-y: -44vw;
+
+nav {
+  display: block;
+  z-index: 200;
+  position: absolute;
+  height: 110vw;
+  width: 4.5vw;
+  opacity: .9;
+  transition: none;
+  transform: rotate(-67deg);
+  background: $color-main;
+  &.transition {
+    transition: transform 1.6s cubic-bezier(.15, .85, 0, 1);
+  }
+  &.nav-bottom {
+    left: $nav-start-x;
+    bottom: $nav-start-y;
+    &.active {
+      transform: translate3d(#{$nav-end-x - $nav-start-x}, #{$nav-start-y - $nav-end-y}, 0px) rotate(-67deg);
+    }
+  }
+  &.nav-top {
+    right: $nav-start-x;
+    top: $nav-start-y;
+    &.active {
+      transform: translate3d(#{$nav-start-x - $nav-end-x}, #{$nav-end-y - $nav-start-y}, 0px) rotate(-67deg);
+    }
+  }
+  &.dark {
+    background-color: #e3e3e5;
+  }
+  .nav-wrapper {
+    position: absolute;
+    &.top {
+      bottom: 28vw;
+      .nav-icon {
+        width: 3.5vw;
+        height: 3.5vw;
+      }
+    }
+    &.bot {
+      top: 26vw;
+      .nav-icon {
+        width: 3vw;
+        height: 3vw;
+        &:hover {
+          svg {
+            opacity: 0;
+          }
+          .hover-text {
+            opacity: 1;
+          }
+        }
+      }
+    }
+    .nav-icon {
+      z-index: 900;
+      transition: opacity ease-in 1s;
+      display: inline-block;
+      transform: rotate(67deg);
+      margin-top: 2vw;
+      fill: #F8F8F8;
+      cursor: pointer;
+      opacity: 0;
+      &.active svg {
+        fill: $color-blue;
+      }
+      &.dark {
+        fill: $color-secondary-dark;
+      }
+      &.transition {
+        transition: all ease-in-out .2s;
+      }
+      &:hover, &:focus {
+        fill: $color-blue;
+        transform: rotate(67deg) scale(1.05);
+      }
+      .hover-text {
+        opacity: 0;
+        position: absolute;
+        text-transform: uppercase;
+        font: 800 1vw 'Khula', sans-serif;
+        letter-spacing: 2px;
+        color: $color-blue;
+        left: 50%;
+        margin-top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+    }
+  }
+}
+
+$nav-flat-start-x: -130vw;
+
+$nav-flat-end-x: 2vw;
+
+// NAV change for both contact and mobile view
+
+nav.flat {
+  transform: translate3d(0, 0, 0px) rotate(0deg) !important;
+  transition: none !important;
+  width: 110vw !important;
+  height: 9vh !important;
+  min-height: 50px;
+  &.transition {
+    transition: transform 1.4s cubic-bezier(.15, .85, 0, 1) !important;
+  }
+  &.nav-bottom {
+    bottom: 1.5vh !important;
+    &.active {
+      transform: translate3d(#{$nav-flat-start-x - $nav-flat-end-x}, 0, 0px) rotate(0deg) !important;
+    }
+    .nav-wrapper.bot {
+      display: inline-flex;
+      margin-left: 8vw;
+      float: left;
+    }
+  }
+  &.nav-top {
+    top: 1.5vh !important;
+    &.active {
+      transform: translate3d(#{$nav-flat-end-x - $nav-flat-start-x}, 0, 0px) rotate(0deg) !important;
+    }
+    .nav-wrapper.top {
+      display: inline-flex;
+      margin-right: 8vw;
+      float: right;
+    }
+  }
+  .nav-wrapper {
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+  }
+  .nav-icon {
+    width: 7vh !important;
+    height: 7vh !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    margin: auto 1vw;
+    transform: scale(1) !important;
+    &:hover {
+      transform: scale(1.05) !important;
+    }
+  }
+}
